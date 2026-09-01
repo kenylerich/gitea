@@ -117,12 +117,12 @@ func main() {
 		// also lint with bindata tag if we are in CI or the "bindata" is explicitly set in the env TAGS
 		lintTagsLinux = "bindata"
 	}
-	succeed = runCmd([]string{"GOOS=linux", "TAGS=" + lintTagsLinux}, "golangci-lint", append([]string{"run", "--build-tags=linux," + lintTagsLinux}, os.Args[1:]...)) && succeed
+	succeed = runCmd([]string{"GOOS=linux", "TAGS=" + lintTagsLinux}, "golangci-lint", append([]string{"run", "--config=.config/lint/.golangci.yml", "--build-tags=linux," + lintTagsLinux}, os.Args[1:]...)) && succeed
 
 	if os.Getenv("CI") != "" {
 		// only lint for other platforms when in CI, to keep local lint fast
 		_, _ = fmt.Fprintln(os.Stdout, "lint for windows ...")
-		succeed = runCmd([]string{"GOOS=windows", "TAGS=gogit"}, "golangci-lint", append([]string{"run", "--build-tags=windows,gogit"}, os.Args[1:]...)) && succeed
+		succeed = runCmd([]string{"GOOS=windows", "TAGS=gogit"}, "golangci-lint", append([]string{"run", "--config=.config/lint/.golangci.yml", "--build-tags=windows,gogit"}, os.Args[1:]...)) && succeed
 	}
 
 	if !succeed {

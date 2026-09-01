@@ -13,10 +13,10 @@ import (
 	"time"
 
 	runnerv1 "gitea.dev/actionslib/runner/v1"
-	actions_model "gitea.dev/models/actions"
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
+	actions_model "gitea.dev/backend/models/actions"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

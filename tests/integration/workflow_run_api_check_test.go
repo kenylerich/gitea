@@ -9,11 +9,11 @@ import (
 	"net/url"
 	"testing"
 
-	actions_model "gitea.dev/models/actions"
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/models/db"
-	api "gitea.dev/modules/structs"
-	webhook_module "gitea.dev/modules/webhook"
+	actions_model "gitea.dev/backend/models/actions"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/db"
+	api "gitea.dev/backend/modules/structs"
+	webhook_module "gitea.dev/backend/modules/webhook"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

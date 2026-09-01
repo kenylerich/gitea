@@ -11,12 +11,12 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	conda_module "gitea.dev/modules/packages/conda"
-	"gitea.dev/modules/test"
-	"gitea.dev/modules/zstd"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	conda_module "gitea.dev/backend/modules/packages/conda"
+	"gitea.dev/backend/modules/test"
+	"gitea.dev/backend/modules/zstd"
 	"gitea.dev/tests"
 
 	"github.com/dsnet/compress/bzip2"

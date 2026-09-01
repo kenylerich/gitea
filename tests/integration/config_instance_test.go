@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	system_model "gitea.dev/models/system"
-	"gitea.dev/modules/json"
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/setting/config"
+	system_model "gitea.dev/backend/models/system"
+	"gitea.dev/backend/modules/json"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/setting/config"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

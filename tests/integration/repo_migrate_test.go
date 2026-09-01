@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"gitea.dev/modules/structs"
+	"gitea.dev/backend/modules/structs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

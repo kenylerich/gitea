@@ -3,8 +3,8 @@
 FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.27-alpine3.24 AS frontend-build
 RUN apk --no-cache add build-base git nodejs pnpm
 WORKDIR /src
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml /src/frontend/
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store cd /src/frontend && pnpm install --frozen-lockfile
 COPY --exclude=.git/ . .
 RUN make frontend
 
@@ -34,7 +34,7 @@ RUN --mount=type=cache,target="/root/.cache/go-build" \
     --mount=type=bind,source=".git/",target=".git/" \
     make backend
 
-COPY docker/root /tmp/local
+COPY contrib/packaging/docker/root /tmp/local
 
 # Set permissions for builds that made under windows which strips the executable bit from file
 RUN chmod 755 /tmp/local/usr/bin/entrypoint \

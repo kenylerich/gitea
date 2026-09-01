@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/modules/options"
-	repo_module "gitea.dev/modules/repository"
-	api "gitea.dev/modules/structs"
+	"gitea.dev/backend/modules/options"
+	repo_module "gitea.dev/backend/modules/repository"
+	api "gitea.dev/backend/modules/structs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

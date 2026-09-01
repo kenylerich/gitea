@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"testing"
 
-	issues_model "gitea.dev/models/issues"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	api "gitea.dev/modules/structs"
+	issues_model "gitea.dev/backend/models/issues"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	api "gitea.dev/backend/modules/structs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

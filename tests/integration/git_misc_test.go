@@ -10,14 +10,14 @@ import (
 	"sync"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	issues_model "gitea.dev/models/issues"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/git"
-	"gitea.dev/modules/git/gitcmd"
-	files_service "gitea.dev/services/repository/files"
+	auth_model "gitea.dev/backend/models/auth"
+	issues_model "gitea.dev/backend/models/issues"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/git/gitcmd"
+	files_service "gitea.dev/backend/services/repository/files"
 
 	"github.com/stretchr/testify/assert"
 )

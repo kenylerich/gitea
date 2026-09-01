@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/setting"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/setting"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

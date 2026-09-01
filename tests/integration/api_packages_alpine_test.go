@@ -14,11 +14,11 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	alpine_module "gitea.dev/modules/packages/alpine"
-	alpine_service "gitea.dev/services/packages/alpine"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	alpine_module "gitea.dev/backend/modules/packages/alpine"
+	alpine_service "gitea.dev/backend/services/packages/alpine"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

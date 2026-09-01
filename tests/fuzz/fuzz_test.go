@@ -8,9 +8,9 @@ import (
 	"io"
 	"testing"
 
-	"gitea.dev/modules/markup"
-	"gitea.dev/modules/markup/markdown"
-	"gitea.dev/modules/setting"
+	"gitea.dev/backend/modules/markup"
+	"gitea.dev/backend/modules/markup/markdown"
+	"gitea.dev/backend/modules/setting"
 )
 
 func newFuzzRenderContext() *markup.RenderContext {

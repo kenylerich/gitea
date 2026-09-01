@@ -11,9 +11,9 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/avatar"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/avatar"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

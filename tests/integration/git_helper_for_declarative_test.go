@@ -15,12 +15,12 @@ import (
 	"testing"
 	"time"
 
-	"gitea.dev/modules/generate"
-	"gitea.dev/modules/git"
-	"gitea.dev/modules/git/gitcmd"
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/ssh"
-	"gitea.dev/modules/util"
+	"gitea.dev/backend/modules/generate"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/git/gitcmd"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/ssh"
+	"gitea.dev/backend/modules/util"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

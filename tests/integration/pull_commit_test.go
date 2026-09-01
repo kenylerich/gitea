@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	pull_service "gitea.dev/services/pull"
+	pull_service "gitea.dev/backend/services/pull"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

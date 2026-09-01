@@ -24,11 +24,13 @@ releases.
 
 [Install Node.js](https://nodejs.org/en/download/) to build the JavaScript and CSS
 files. The minimum supported version is the one declared in
-[`package.json`](../package.json) (`engines.node`); the latest LTS is recommended.
+[`package.json`](../frontend/package.json) (`engines.node`); the latest LTS is recommended.
 
 Gitea manages frontend dependencies with [pnpm](https://pnpm.io/). The `make`
 targets invoke it for you, so installing pnpm manually is only needed if you want
-to run `pnpm` commands directly.
+to run `pnpm` commands directly. pnpm commands run inside `frontend/`, where the
+frontend project's `package.json` and `pnpm-lock.yaml` live; the Makefile symlinks
+a root `node_modules` there for tools that still run from the repository root.
 
 ### Make
 
@@ -39,7 +41,8 @@ tests. On Windows it can be installed via [MSYS2](https://www.msys2.org/) or
 ### Python with uv (optional)
 
 Linting the templates, workflow files, and YAML requires Python tooling that Gitea
-runs through [uv](https://docs.astral.sh/uv/). After installing uv, `make` creates
+runs through [uv](https://docs.astral.sh/uv/). The project root files
+(`pyproject.toml`, `uv.lock`) live in `.config/tools/`, and `make` creates
 the environment automatically (`uv sync`); you only need this if you run
 `make lint-templates`, `make lint-yaml`, or `make lint-actions` locally.
 

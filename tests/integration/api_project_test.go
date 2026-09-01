@@ -10,11 +10,11 @@ import (
 	"strconv"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	issues_model "gitea.dev/models/issues"
-	project_model "gitea.dev/models/project"
-	"gitea.dev/models/unittest"
-	api "gitea.dev/modules/structs"
+	auth_model "gitea.dev/backend/models/auth"
+	issues_model "gitea.dev/backend/models/issues"
+	project_model "gitea.dev/backend/models/project"
+	"gitea.dev/backend/models/unittest"
+	api "gitea.dev/backend/modules/structs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

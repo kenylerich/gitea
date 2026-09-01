@@ -7,7 +7,7 @@ import (
 	"io"
 	"testing"
 
-	"gitea.dev/modules/test"
+	"gitea.dev/backend/modules/test"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/stretchr/testify/assert"

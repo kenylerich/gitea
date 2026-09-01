@@ -11,10 +11,10 @@ import (
 	"net/url"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/models/db"
-	git_model "gitea.dev/models/git"
-	api "gitea.dev/modules/structs"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/db"
+	git_model "gitea.dev/backend/models/git"
+	api "gitea.dev/backend/modules/structs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

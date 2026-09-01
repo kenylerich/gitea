@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	"gitea.dev/modules/test"
-	"gitea.dev/modules/translation"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	"gitea.dev/backend/modules/test"
+	"gitea.dev/backend/modules/translation"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/stretchr/testify/assert"

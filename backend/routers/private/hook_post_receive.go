@@ -1,0 +1,289 @@
+// Copyright 2021 The Gitea Authors. All rights reserved.
+// SPDX-License-Identifier: MIT
+
+package private
+
+import (
+	"errors"
+	"fmt"
+	"net/http"
+
+	git_model "gitea.dev/backend/models/git"
+	issues_model "gitea.dev/backend/models/issues"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/log"
+	"gitea.dev/backend/modules/private"
+	repo_module "gitea.dev/backend/modules/repository"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/timeutil"
+	"gitea.dev/backend/modules/util"
+	"gitea.dev/backend/modules/web"
+	gitea_context "gitea.dev/backend/services/context"
+	pull_service "gitea.dev/backend/services/pull"
+	repo_service "gitea.dev/backend/services/repository"
+)
+
+func hookPostReceiveCollectPushUpdates(opts *private.HookOptions, repo *repo_model.Repository) []*repo_module.PushUpdateOptions {
+	updates := make([]*repo_module.PushUpdateOptions, 0, len(opts.OldCommitIDs))
+	for i := range opts.OldCommitIDs {
+		refFullName := opts.RefFullNames[i]
+
+		// Only trigger activity updates for changes to branches or
+		// tags.  Updates to other refs (eg, refs/notes, refs/changes,
+		// or other less-standard refs spaces are ignored since there
+		// may be a very large number of them).
+		if refFullName.IsBranch() || refFullName.IsTag() {
+			option := &repo_module.PushUpdateOptions{
+				RefFullName:  refFullName,
+				OldCommitID:  opts.OldCommitIDs[i],
+				NewCommitID:  opts.NewCommitIDs[i],
+				PusherID:     opts.UserID,
+				PusherName:   opts.UserName,
+				RepoUserName: repo.OwnerName,
+				RepoName:     repo.Name,
+			}
+			updates = append(updates, option)
+		}
+	}
+	return updates
+}
+
+func hookPostReceiveSyncDatabaseBranches(ctx *gitea_context.PrivateContext, opts *private.HookOptions, repo *repo_model.Repository, updates []*repo_module.PushUpdateOptions) bool {
+	branchesToSync := make([]*repo_module.PushUpdateOptions, 0, len(updates))
+	for _, update := range updates {
+		if !update.RefFullName.IsBranch() {
+			continue
+		}
+		if update.IsDelRef() {
+			if err := git_model.MarkBranchAsDeleted(ctx, repo.ID, update.RefFullName.BranchName(), update.PusherID); err != nil {
+				ctx.PrivateInternalErrorf("failed to mark branch %s as deleted: %v", update.RefFullName, err)
+				return false
+			}
+		} else {
+			branchesToSync = append(branchesToSync, update)
+			// TODO: should we return the error and return the error when pushing? Currently it will log the error and not prevent the pushing
+			pull_service.UpdatePullsRefs(ctx, repo, update)
+		}
+	}
+
+	if len(branchesToSync) == 0 {
+		return true
+	}
+
+	gitRepo, err := git.RepositoryFromRequestContextOrOpen(ctx, repo)
+	if err != nil {
+		ctx.PrivateInternalErrorf("failed to open repository: %v", err)
+		return false
+	}
+
+	branchNames := make([]string, 0, len(branchesToSync))
+	commitIDs := make([]string, 0, len(branchesToSync))
+	for _, update := range branchesToSync {
+		branchNames = append(branchNames, update.RefFullName.BranchName())
+		commitIDs = append(commitIDs, update.NewCommitID)
+	}
+
+	if err = repo_service.SyncBranchesToDB(ctx, repo.ID, opts.UserID, gitRepo, branchNames, commitIDs); err != nil {
+		ctx.PrivateInternalErrorf("failed to sync branch to DB: %v", err)
+		return false
+	}
+	return true
+}
+
+// HookPostReceive updates services and users
+func HookPostReceive(ctx *gitea_context.PrivateContext) {
+	opts := web.GetForm[*private.HookOptions](ctx)
+	if opts.IsWiki {
+		setting.PanicInDevOrTesting("wiki hook-post-receive is not supported")
+		return
+	}
+	if !loadContextDoerPermission(ctx, opts.UserID, opts.UserExtDoerData) {
+		return
+	}
+
+	repo := ctx.Repo.Repository
+	// first, collect updates and sync branches
+	updates := hookPostReceiveCollectPushUpdates(opts, repo)
+	if !hookPostReceiveSyncDatabaseBranches(ctx, opts, repo, updates) {
+		return
+	}
+	hookPostReceiveSyncRepoDefaultBranch(ctx, opts, repo)
+
+	// handle pull request merging, a pull request action should push at least 1 commit
+	if opts.PushTrigger == repo_module.PushTriggerPRMergeToBase {
+		if !hookPostReceiveHandlePullRequestMerging(ctx, opts, updates) {
+			return
+		}
+	}
+
+	if !hookPostReceiveUpdateRepoByOptions(ctx, opts, repo) {
+		return
+	}
+
+	// push async updates
+	if err := repo_service.PushUpdates(updates...); err != nil {
+		ctx.PrivateInternalErrorf("failed to push updates: %v", err)
+		return
+	}
+
+	hookPostReceiveRespondWithTrailer(ctx, opts, repo)
+}
+
+func hookPostReceiveUpdateRepoByOptions(ctx *gitea_context.PrivateContext, opts *private.HookOptions, repo *repo_model.Repository) bool {
+	isPrivate := opts.GitPushOptions.Bool(private.GitPushOptionRepoPrivate)
+	isTemplate := opts.GitPushOptions.Bool(private.GitPushOptionRepoTemplate)
+	// Handle Push Options
+	if isPrivate.Has() || isTemplate.Has() {
+		if !ctx.Repo.Permission.IsAdmin() {
+			ctx.PrivateUserErrorf(http.StatusNotFound, "permission denied")
+			return false
+		}
+
+		// Only honor these options while the repo is still empty (the push-to-create
+		// case). On a populated repo a bare "git push -o repo.private=..." would
+		// silently flip visibility, bypassing the audit log, webhooks and notifications.
+		if !repo.IsEmpty {
+			return true
+		}
+
+		// The repo is empty and being initialized by this push, so there is no
+		// dependent state (webhooks, notifications, visibility fan-out) to reconcile
+		// yet; setting the flags directly is sufficient in this push-to-create case.
+		if isPrivate.Has() && repo.IsPrivate != isPrivate.Value() {
+			repo.IsPrivate = isPrivate.Value()
+			if err := repo_model.UpdateRepositoryColsNoAutoTime(ctx, repo, "is_private"); err != nil {
+				log.Error("failed to update repo is_private: %v", err)
+			}
+		}
+		if isTemplate.Has() && repo.IsTemplate != isTemplate.Value() {
+			repo.IsTemplate = isTemplate.Value()
+			if err := repo_model.UpdateRepositoryColsNoAutoTime(ctx, repo, "is_template"); err != nil {
+				log.Error("failed to update repo is_template: %v", err)
+			}
+		}
+	}
+	return true
+}
+
+func hookPostReceiveRespondWithTrailer(ctx *gitea_context.PrivateContext, opts *private.HookOptions, repo *repo_model.Repository) {
+	results := make([]private.HookPostReceiveBranchResult, 0, len(opts.OldCommitIDs))
+	baseRepo := repo
+	if repo.IsFork {
+		if err := repo.GetBaseRepo(ctx); err != nil {
+			ctx.PrivateInternalErrorf("failed to load base repo: %v", err)
+			return
+		}
+		if repo.BaseRepo.AllowsPulls(ctx) {
+			baseRepo = repo.BaseRepo
+		}
+	}
+
+	if !baseRepo.AllowsPulls(ctx) {
+		// We can stop there's no need to go any further
+		ctx.JSON(http.StatusOK, private.HookPostReceiveResult{})
+		return
+	}
+
+	// Now handle the pull request notification trailers
+	for i := range opts.OldCommitIDs {
+		refFullName := opts.RefFullNames[i]
+		newCommitID := opts.NewCommitIDs[i]
+
+		// If we've pushed a branch (and not deleted it)
+		if !git.IsEmptyCommitID(newCommitID) && refFullName.IsBranch() {
+			branch := refFullName.BranchName()
+
+			if branch == baseRepo.DefaultBranch && !repo.IsFork {
+				// If our branch is the default branch of an unforked repo - there's no PR to create or refer to
+				results = append(results, private.HookPostReceiveBranchResult{})
+				continue
+			}
+
+			pr, err := issues_model.GetUnmergedPullRequest(ctx, repo.ID, baseRepo.ID, branch, baseRepo.DefaultBranch, issues_model.PullRequestFlowGithub)
+			if err != nil && !errors.Is(err, util.ErrNotExist) {
+				ctx.PrivateInternalErrorf("failed to get active PR for branch %s: %v", branch, err)
+				return
+			}
+			if pr == nil {
+				results = append(results, private.HookPostReceiveBranchResult{
+					Message: setting.Git.PullRequestPushMessage && baseRepo.AllowsPulls(ctx),
+					Create:  true,
+					Branch:  branch,
+					URL:     fmt.Sprintf("%s/pulls/new/%s", repo.HTMLURL(), util.PathEscapeSegments(branch)),
+				})
+			} else {
+				results = append(results, private.HookPostReceiveBranchResult{
+					Message: setting.Git.PullRequestPushMessage && baseRepo.AllowsPulls(ctx),
+					Create:  false,
+					Branch:  branch,
+					URL:     fmt.Sprintf("%s/pulls/%d", baseRepo.HTMLURL(), pr.Index),
+				})
+			}
+		}
+	}
+	ctx.JSON(http.StatusOK, private.HookPostReceiveResult{Results: results})
+}
+
+// hookPostReceiveHandlePullRequestMerging handle pull request merging, a pull request action should push at least 1 commit
+func hookPostReceiveHandlePullRequestMerging(ctx *gitea_context.PrivateContext, opts *private.HookOptions, updates []*repo_module.PushUpdateOptions) bool {
+	if len(updates) == 0 {
+		ctx.PrivateInternalErrorf("Pushing a merged PR (pr:%d) no commits pushed ", opts.PullRequestID)
+		return false
+	}
+
+	pr, err := issues_model.GetPullRequestByID(ctx, opts.PullRequestID)
+	if err != nil {
+		ctx.PrivateInternalErrorf("failed to get pull request %d: %v", opts.PullRequestID, err)
+		return false
+	}
+
+	// FIXME: Maybe we need a `PullRequestStatusMerged` status for PRs that are merged, currently we use the previous status
+	// here to keep it as before, that maybe PullRequestStatusMergeable
+	_, err = pull_service.SetMerged(ctx, pr, updates[len(updates)-1].NewCommitID, timeutil.TimeStampNow(), ctx.Doer, pr.Status)
+	if err != nil {
+		ctx.PrivateInternalErrorf("failed to set pr %d to merged: %v", pr.ID, err)
+		return false
+	}
+	return true
+}
+
+func hookPostReceiveSyncRepoDefaultBranch(ctx *gitea_context.PrivateContext, opts *private.HookOptions, repo *repo_model.Repository) {
+	hasBranch := false
+	for _, refFullName := range opts.RefFullNames {
+		if hasBranch = refFullName.IsBranch(); hasBranch {
+			break
+		}
+	}
+	if !hasBranch {
+		return
+	}
+	gitRepo, err := git.RepositoryFromRequestContextOrOpen(ctx, repo)
+	if err != nil {
+		log.Error("failed to open git repo: %v", err)
+		return
+	}
+
+	// if default branch doesn't exist, try to guess one from existing git repo
+	_, err = gitRepo.GetBranchCommitID(ctx, repo.DefaultBranch)
+	if errors.Is(err, util.ErrNotExist) {
+		for _, guessBranchName := range []string{"main", "master"} {
+			if _, err = gitRepo.GetBranchCommitID(ctx, guessBranchName); err == nil {
+				repo.DefaultBranch = guessBranchName
+				err = repo_model.UpdateDefaultBranch(ctx, repo)
+				if err != nil {
+					log.Error("failed to update default branch: %v", err)
+					return
+				}
+				break
+			}
+		}
+	}
+
+	// if default branch was pushed, always keep the HEAD ref in sync
+	for _, refFullName := range opts.RefFullNames {
+		if refFullName.IsBranch() && refFullName.BranchName() == repo.DefaultBranch {
+			_ = git.SetDefaultBranch(ctx, repo, repo.DefaultBranch)
+		}
+	}
+}

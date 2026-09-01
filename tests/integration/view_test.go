@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/test"
-	"gitea.dev/modules/web"
-	"gitea.dev/services/context"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/test"
+	"gitea.dev/backend/modules/web"
+	"gitea.dev/backend/services/context"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

@@ -16,12 +16,12 @@ import (
 	"strings"
 	"testing"
 
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/json"
-	rpm_module "gitea.dev/modules/packages/rpm"
-	"gitea.dev/modules/setting"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/json"
+	rpm_module "gitea.dev/backend/modules/packages/rpm"
+	"gitea.dev/backend/modules/setting"
 	"gitea.dev/tests"
 
 	"github.com/ProtonMail/go-crypto/openpgp"

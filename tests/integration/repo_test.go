@@ -1,7 +1,7 @@
 // Copyright 2017 The Gitea Authors. All rights reserved.
 // SPDX-License-Identifier: MIT
 
-//nolint:govet // disable "composites: gitea.dev/modules/git.FastImportFile struct literal uses unkeyed fields"
+//nolint:govet // disable "composites: gitea.dev/backend/modules/git.FastImportFile struct literal uses unkeyed fields"
 package integration
 
 import (
@@ -14,17 +14,17 @@ import (
 	"testing"
 	"time"
 
-	"gitea.dev/models/db"
-	issues_model "gitea.dev/models/issues"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unit"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/git"
-	"gitea.dev/modules/git/gitrepo"
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/test"
-	repo_service "gitea.dev/services/repository"
+	"gitea.dev/backend/models/db"
+	issues_model "gitea.dev/backend/models/issues"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unit"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/git/gitrepo"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/test"
+	repo_service "gitea.dev/backend/services/repository"
 	"gitea.dev/tests"
 
 	"github.com/PuerkitoBio/goquery"

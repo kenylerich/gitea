@@ -14,12 +14,12 @@ import (
 	"sync"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	"gitea.dev/modules/git/gitcmd"
-	api "gitea.dev/modules/structs"
-	"gitea.dev/modules/test"
+	auth_model "gitea.dev/backend/models/auth"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	"gitea.dev/backend/modules/git/gitcmd"
+	api "gitea.dev/backend/modules/structs"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

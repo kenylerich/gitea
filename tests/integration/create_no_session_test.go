@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gitea.dev/modules/json"
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/test"
-	"gitea.dev/routers"
+	"gitea.dev/backend/modules/json"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/test"
+	"gitea.dev/backend/routers"
 	"gitea.dev/tests"
 
 	"gitea.com/go-chi/session"

@@ -18,10 +18,10 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/packages/rubygems"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/packages/rubygems"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

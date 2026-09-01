@@ -141,7 +141,7 @@ It is synced regularly with Crowdin. \
 Other locales on main branch **should not** be updated manually as they will be overwritten with each sync. \
 Once a language has reached a **satisfactory percentage** of translated keys (~25%), it will be synced back into this repo and included in the next released version.
 
-The tool `go run build/backport-locale.go` can be used to backport locales from the main branch to release branches that were missed.
+The tool `go run backend/build/backport-locale.go` can be used to backport locales from the main branch to release branches that were missed.
 
 ## Code review
 

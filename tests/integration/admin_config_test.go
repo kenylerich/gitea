@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/models/system"
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/setting/config"
-	"gitea.dev/modules/test"
+	"gitea.dev/backend/models/system"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/setting/config"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

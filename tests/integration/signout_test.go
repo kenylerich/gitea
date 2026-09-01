@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/test"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

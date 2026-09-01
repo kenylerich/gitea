@@ -9,9 +9,9 @@ import (
 	"path"
 	"testing"
 
-	"gitea.dev/modules/setting"
-	api "gitea.dev/modules/structs"
-	"gitea.dev/modules/test"
+	"gitea.dev/backend/modules/setting"
+	api "gitea.dev/backend/modules/structs"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

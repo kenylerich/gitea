@@ -9,10 +9,10 @@ import (
 	"net/url"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/modules/setting"
-	api "gitea.dev/modules/structs"
-	"gitea.dev/modules/test"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/modules/setting"
+	api "gitea.dev/backend/modules/structs"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/42wim/httpsig"

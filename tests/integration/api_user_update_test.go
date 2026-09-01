@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
+	auth_model "gitea.dev/backend/models/auth"
 	"gitea.dev/tests"
 )
 

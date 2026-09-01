@@ -12,12 +12,12 @@ import (
 	"net/http"
 	"testing"
 
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	arch_module "gitea.dev/modules/packages/arch"
-	"gitea.dev/modules/test"
-	arch_service "gitea.dev/services/packages/arch"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	arch_module "gitea.dev/backend/modules/packages/arch"
+	"gitea.dev/backend/modules/test"
+	arch_service "gitea.dev/backend/services/packages/arch"
 	"gitea.dev/tests"
 
 	"github.com/klauspost/compress/zstd"

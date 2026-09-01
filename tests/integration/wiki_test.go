@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/modules/git"
-	"gitea.dev/modules/git/gitcmd"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/git/gitcmd"
 	"gitea.dev/tests"
 
 	"github.com/PuerkitoBio/goquery"

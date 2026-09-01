@@ -14,12 +14,12 @@ import (
 	"testing"
 	"time"
 
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	pub_module "gitea.dev/modules/packages/pub"
-	"gitea.dev/modules/test"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	pub_module "gitea.dev/backend/modules/packages/pub"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

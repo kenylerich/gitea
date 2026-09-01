@@ -12,30 +12,30 @@ import (
 	"testing"
 	"time"
 
-	actions_model "gitea.dev/models/actions"
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/models/db"
-	git_model "gitea.dev/models/git"
-	issues_model "gitea.dev/models/issues"
-	"gitea.dev/models/perm"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	actions_module "gitea.dev/modules/actions"
-	"gitea.dev/modules/commitstatus"
-	"gitea.dev/modules/git"
-	"gitea.dev/modules/json"
-	"gitea.dev/modules/setting"
-	api "gitea.dev/modules/structs"
-	"gitea.dev/modules/test"
-	"gitea.dev/modules/timeutil"
-	webhook_module "gitea.dev/modules/webhook"
-	issue_service "gitea.dev/services/issue"
-	pull_service "gitea.dev/services/pull"
-	release_service "gitea.dev/services/release"
-	repo_service "gitea.dev/services/repository"
-	commitstatus_service "gitea.dev/services/repository/commitstatus"
-	files_service "gitea.dev/services/repository/files"
+	actions_model "gitea.dev/backend/models/actions"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/db"
+	git_model "gitea.dev/backend/models/git"
+	issues_model "gitea.dev/backend/models/issues"
+	"gitea.dev/backend/models/perm"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	actions_module "gitea.dev/backend/modules/actions"
+	"gitea.dev/backend/modules/commitstatus"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/json"
+	"gitea.dev/backend/modules/setting"
+	api "gitea.dev/backend/modules/structs"
+	"gitea.dev/backend/modules/test"
+	"gitea.dev/backend/modules/timeutil"
+	webhook_module "gitea.dev/backend/modules/webhook"
+	issue_service "gitea.dev/backend/services/issue"
+	pull_service "gitea.dev/backend/services/pull"
+	release_service "gitea.dev/backend/services/release"
+	repo_service "gitea.dev/backend/services/repository"
+	commitstatus_service "gitea.dev/backend/services/repository/commitstatus"
+	files_service "gitea.dev/backend/services/repository/files"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -755,7 +755,7 @@ func checkCommitStatusAndInsertFakeStatus(t *testing.T, repo *repo_model.Reposit
 }
 
 // insertFakeStatus inserts a success status that lands in the same dedupe
-// group as `prev` â€” the actions runner mixes the workflow file path into
+// group as `prev` â€?the actions runner mixes the workflow file path into
 // ContextHash, so we must reuse it (rather than recomputing from Context).
 func insertFakeStatus(t *testing.T, repo *repo_model.Repository, sha string, prev *git_model.CommitStatus) {
 	err := commitstatus_service.CreateCommitStatus(t.Context(), repo, user_model.NewActionsUser(), sha, &git_model.CommitStatus{

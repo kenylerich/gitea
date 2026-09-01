@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"testing"
 
-	issues_model "gitea.dev/models/issues"
-	"gitea.dev/models/unittest"
+	issues_model "gitea.dev/backend/models/issues"
+	"gitea.dev/backend/models/unittest"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

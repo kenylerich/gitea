@@ -7,9 +7,9 @@ import (
 	"sync"
 	"testing"
 
-	actions_model "gitea.dev/models/actions"
-	"gitea.dev/models/db"
-	"gitea.dev/models/unittest"
+	actions_model "gitea.dev/backend/models/actions"
+	"gitea.dev/backend/models/db"
+	"gitea.dev/backend/models/unittest"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

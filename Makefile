@@ -109,18 +109,18 @@ endif
 LDFLAGS := $(LDFLAGS) -X "main.Version=$(GITEA_VERSION)" -X "main.Tags=$(TAGS)"
 RELEASE_ENV = GO="$(GO)" TAGS="$(TAGS)" LDFLAGS="$(LDFLAGS)" DIST="$(DIST)" VERSION="$(VERSION)"
 
-GO_TEST_PACKAGES ?= $(filter-out $(shell $(GO) list gitea.dev/modelmigration/...) gitea.dev/tests/integration/migration-test gitea.dev/tests gitea.dev/tests/integration,$(shell $(GO) list ./... | grep -v /vendor/))
-MIGRATE_TEST_PACKAGES ?= $(shell $(GO) list gitea.dev/modelmigration/...)
+GO_TEST_PACKAGES ?= $(filter-out $(shell $(GO) list gitea.dev/backend/modelmigration/...) gitea.dev/tests/integration/migration-test gitea.dev/tests gitea.dev/tests/integration,$(shell $(GO) list ./... | grep -v /vendor/))
+MIGRATE_TEST_PACKAGES ?= $(shell $(GO) list gitea.dev/backend/modelmigration/...)
 
-FRONTEND_SOURCES := $(shell find web_src/js web_src/css -type f)
-FRONTEND_CONFIGS := vite.config.ts tailwind.config.ts
+FRONTEND_SOURCES := $(shell find frontend/web_src/js frontend/web_src/css -type f)
+FRONTEND_CONFIGS := frontend/vite.config.ts frontend/tailwind.config.ts
 FRONTEND_DEST := public/assets/.vite/manifest.json
 FRONTEND_DEST_ENTRIES := public/assets/js public/assets/css public/assets/fonts public/assets/.vite
 FRONTEND_DEV_LOG_LEVEL ?= warn
 
-BINDATA_DEST_WILDCARD := modules/migration/bindata.* modules/public/bindata.* modules/options/bindata.* modules/templates/bindata.*
+BINDATA_DEST_WILDCARD := backend/modules/migration/bindata.* backend/modules/public/bindata.* backend/modules/options/bindata.* backend/modules/templates/bindata.*
 
-GENERATED_GO_DEST := modules/charset/invisible_gen.go modules/charset/ambiguous_gen.go
+GENERATED_GO_DEST := backend/modules/charset/invisible_gen.go backend/modules/charset/ambiguous_gen.go
 
 SVG_DEST_DIR := public/assets/img/svg
 SVG_DEST_DIRS := $(SVG_DEST_DIR) options/fileicon
@@ -131,11 +131,11 @@ GO_LICENSE_FILE := assets/go-licenses.json
 
 TAR_EXCLUDES := .git data indexers queues log node_modules $(EXECUTABLE) $(DIST) $(MAKE_EVIDENCE_DIR) $(AIR_TMP_DIR)
 
-GO_DIRS := build cmd modelmigration models modules routers services tests tools
-WEB_DIRS := web_src/js web_src/css
+GO_DIRS := backend/build backend/cmd backend/modelmigration backend/models backend/modules backend/routers backend/services tests tools
+WEB_DIRS := frontend/web_src/js frontend/web_src/css
 
-ESLINT_FILES := web_src/js tools *.ts tests/e2e
-STYLELINT_FILES := web_src/css web_src/js/components/*.vue
+ESLINT_FILES := frontend/web_src/js tools frontend/*.ts tests/e2e
+STYLELINT_FILES := frontend/web_src/css frontend/web_src/js/components/*.vue
 SPELLCHECK_FILES := $(GO_DIRS) $(WEB_DIRS) templates options/locale/locale_en-US.json .github $(filter-out CHANGELOG.md, $(wildcard *.go *.md *.yml *.yaml *.toml))
 EDITORCONFIG_FILES := templates .github/workflows options/locale/locale_en-US.json
 
@@ -188,7 +188,7 @@ help: Makefile ## print Makefile help information.
 
 .PHONY: clean-all
 clean-all: clean ## delete backend, frontend and integration files
-	rm -rf $(FRONTEND_DEST_ENTRIES) node_modules
+	rm -rf $(FRONTEND_DEST_ENTRIES) node_modules frontend/node_modules
 
 .PHONY: clean
 clean: ## delete backend and integration files
@@ -251,8 +251,8 @@ swagger-validate: ## check if the swagger spec is valid
 .PHONY: generate-openapi3
 generate-openapi3: $(OPENAPI3_SPEC) ## generate the OpenAPI 3.0 spec from the Swagger 2.0 spec
 
-$(OPENAPI3_SPEC): $(SWAGGER_SPEC) build/generate-openapi.go $(wildcard build/openapi3gen/*.go)
-	$(GO) run build/generate-openapi.go
+$(OPENAPI3_SPEC): $(SWAGGER_SPEC) backend/build/generate-openapi.go $(wildcard backend/build/openapi3gen/*.go)
+	$(GO) run backend/build/generate-openapi.go
 
 .PHONY: openapi3-check
 openapi3-check: generate-openapi3
@@ -292,33 +292,33 @@ lint-backend-fix: lint-go-fix lint-editorconfig ## lint backend files and fix is
 
 .PHONY: lint-js
 lint-js: node_modules ## lint js and ts files
-	pnpm exec eslint $(ESLINT_ARGS) $(ESLINT_FILES)
-	pnpm exec vue-tsc
+	node_modules/.bin/eslint --config frontend/eslint.config.ts $(ESLINT_ARGS) $(ESLINT_FILES)
+	node_modules/.bin/vue-tsc -p frontend/tsconfig.json
 
 .PHONY: lint-js-fix
 lint-js-fix: node_modules ## lint js and ts files and fix issues
-	pnpm exec eslint $(ESLINT_ARGS) $(ESLINT_FILES) --fix
-	pnpm exec vue-tsc
+	node_modules/.bin/eslint --config frontend/eslint.config.ts $(ESLINT_ARGS) $(ESLINT_FILES) --fix
+	node_modules/.bin/vue-tsc -p frontend/tsconfig.json
 
 .PHONY: lint-css
 lint-css: node_modules ## lint css files
-	pnpm exec stylelint --color --max-warnings=0 $(STYLELINT_FILES)
+	node_modules/.bin/stylelint --config frontend/stylelint.config.ts --color --max-warnings=0 $(STYLELINT_FILES)
 
 .PHONY: lint-css-fix
 lint-css-fix: node_modules ## lint css files and fix issues
-	pnpm exec stylelint --color --max-warnings=0 $(STYLELINT_FILES) --fix
+	node_modules/.bin/stylelint --config frontend/stylelint.config.ts --color --max-warnings=0 $(STYLELINT_FILES) --fix
 
 .PHONY: lint-swagger
 lint-swagger: node_modules ## lint swagger files
-	pnpm exec spectral lint -q -F hint $(SWAGGER_SPEC) $(OPENAPI3_SPEC)
+	node_modules/.bin/spectral lint --ruleset .config/lint/.spectral.yaml -q -F hint $(SWAGGER_SPEC) $(OPENAPI3_SPEC)
 
 .PHONY: lint-md
 lint-md: node_modules ## lint markdown files
-	pnpm exec markdownlint *.md
+	node_modules/.bin/markdownlint --config .config/lint/.markdownlint.yaml *.md
 
 .PHONY: lint-md-fix
 lint-md-fix: node_modules ## lint markdown files and fix issues
-	pnpm exec markdownlint --fix *.md
+	node_modules/.bin/markdownlint --config .config/lint/.markdownlint.yaml --fix *.md
 
 .PHONY: lint-spell
 lint-spell: ## lint spelling
@@ -344,28 +344,28 @@ lint-editorconfig:
 .PHONY: lint-actions
 lint-actions: .venv ## lint action workflow files
 	@$(GO) run $(ACTIONLINT_PACKAGE)
-	@uv run --frozen zizmor --quiet --persona=pedantic --min-confidence=medium .github
+	@uv run --project .config/tools --frozen zizmor --quiet --persona=pedantic --min-confidence=medium .github
 
 .PHONY: lint-shell
 lint-shell: ## lint shell scripts
-	@SHELLCHECK_IMAGE=$(SHELLCHECK_IMAGE) CONTAINER_RUNTIME=$(CONTAINER_RUNTIME) ./tools/lint-shell.sh $$(git ls-files '*.sh')
+	@SHELLCHECK_IMAGE=$(SHELLCHECK_IMAGE) CONTAINER_RUNTIME=$(CONTAINER_RUNTIME) ./tools/lint-shell.sh --rcfile=.config/lint/.shellcheckrc $$(git ls-files '*.sh')
 
 .PHONY: lint-templates
 lint-templates: .venv node_modules ## lint template files
 	@node tools/lint-templates-svg.ts
-	@uv run --frozen djlint $(shell find templates -type f -iname '*.tmpl')
+	@uv run --project .config/tools --frozen djlint $(shell find templates -type f -iname '*.tmpl')
 
 .PHONY: lint-yaml
 lint-yaml: .venv ## lint yaml files
-	@uv run --frozen yamllint -s .
+	@uv run --project .config/tools --frozen yamllint -s -c .config/lint/.yamllint.yaml .
 
 .PHONY: lint-json
 lint-json: node_modules ## lint json files
-	pnpm exec eslint -c eslint.json.config.ts $(ESLINT_ARGS)
+	node_modules/.bin/eslint -c frontend/eslint.json.config.ts $(ESLINT_ARGS)
 
 .PHONY: lint-json-fix
 lint-json-fix: node_modules ## lint and fix json files
-	pnpm exec eslint -c eslint.json.config.ts $(ESLINT_ARGS) --fix
+	node_modules/.bin/eslint -c frontend/eslint.json.config.ts $(ESLINT_ARGS) --fix
 
 .PHONY: watch
 watch: ## watch everything and continuously rebuild
@@ -373,11 +373,11 @@ watch: ## watch everything and continuously rebuild
 
 .PHONY: watch-frontend
 watch-frontend: node_modules ## start vite dev server for frontend
-	NODE_ENV=development pnpm exec vite --logLevel $(FRONTEND_DEV_LOG_LEVEL)
+	NODE_ENV=development node_modules/.bin/vite --config frontend/vite.config.ts --logLevel $(FRONTEND_DEV_LOG_LEVEL)
 
 .PHONY: watch-backend
 watch-backend: ## watch backend files and continuously rebuild
-	GITEA_RUN_MODE=dev $(GO) run $(AIR_PACKAGE) -c .air.toml
+	GITEA_RUN_MODE=dev $(GO) run $(AIR_PACKAGE) -c .config/tools/.air.toml
 
 .PHONY: test-backend
 test-backend: ## test backend files
@@ -386,7 +386,7 @@ test-backend: ## test backend files
 
 .PHONY: test-frontend
 test-frontend: playwright ## test frontend files
-	pnpm exec vitest
+	node_modules/.bin/vitest --config frontend/vitest.config.ts
 
 .PHONY: test-check
 test-check:
@@ -444,7 +444,7 @@ tidy-check: tidy
 go-licenses: $(GO_LICENSE_FILE) ## regenerate go licenses
 
 $(GO_LICENSE_FILE): go.mod go.sum
-	GO=$(GO) $(GO) run build/generate-go-licenses.go $(GO_LICENSE_FILE)
+	GO=$(GO) $(GO) run backend/build/generate-go-licenses.go $(GO_LICENSE_FILE)
 
 .PHONY: test-integration
 test-integration: $(EXECUTABLE)
@@ -476,7 +476,7 @@ migrations.individual.test:
 
 .PHONY: migrations.individual.test\#%
 migrations.individual.test\#%:
-	$(GO) test $(GOTEST_FLAGS) -tags '$(TAGS)' gitea.dev/modelmigration/$*
+	$(GO) test $(GOTEST_FLAGS) -tags '$(TAGS)' gitea.dev/backend/modelmigration/$*
 
 .PHONY: playwright
 playwright: deps-frontend
@@ -589,22 +589,24 @@ deps-tools: ## install tool dependencies
 	$(GO) install $(ACTIONLINT_PACKAGE) & \
 	wait
 
-node_modules: pnpm-lock.yaml
-	pnpm install --frozen-lockfile
+node_modules: frontend/pnpm-lock.yaml
+	cd frontend && pnpm install --frozen-lockfile
+	@rm -rf node_modules
+	@ln -sfn frontend/node_modules node_modules
 	@touch node_modules
 
-.venv: uv.lock
-	uv sync
+.venv: .config/tools/uv.lock
+	uv sync --project .config/tools
 	@touch .venv
 
 .PHONY: vite
 vite: $(FRONTEND_DEST) ## build vite files
 
-$(FRONTEND_DEST): $(FRONTEND_SOURCES) $(FRONTEND_CONFIGS) pnpm-lock.yaml
+$(FRONTEND_DEST): $(FRONTEND_SOURCES) $(FRONTEND_CONFIGS) frontend/pnpm-lock.yaml
 	@$(MAKE) -s node_modules
 	@rm -rf $(FRONTEND_DEST_ENTRIES)
 	@echo "Running vite build..."
-	@pnpm exec vite build
+	@node_modules/.bin/vite build --config frontend/vite.config.ts
 	@touch $(FRONTEND_DEST)
 
 .PHONY: svg
@@ -624,18 +626,18 @@ svg-check: svg
 
 .PHONY: lockfile-check
 lockfile-check:
-	pnpm install --frozen-lockfile
-	@diff=$$(git diff --color=always pnpm-lock.yaml); \
+	cd frontend && pnpm install --frozen-lockfile
+	@diff=$$(git diff --color=always frontend/pnpm-lock.yaml); \
 	if [ -n "$$diff" ]; then \
-		echo "pnpm-lock.yaml is inconsistent with package.json"; \
-		echo "Please run 'pnpm install --frozen-lockfile' and commit the result:"; \
+		echo "frontend/pnpm-lock.yaml is inconsistent with frontend/package.json"; \
+		echo "Please run 'cd frontend && pnpm install --frozen-lockfile' and commit the result:"; \
 		printf "%s" "$${diff}"; \
 		exit 1; \
 	fi
 
 .PHONY: generate-gitignore
 generate-gitignore: ## update gitignore files
-	$(GO) run build/generate-gitignores.go
+	$(GO) run backend/build/generate-gitignores.go
 
 .PHONY: generate-images
 generate-images: | node_modules ## generate images

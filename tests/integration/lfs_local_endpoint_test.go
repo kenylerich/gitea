@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gitea.dev/modules/lfs"
+	"gitea.dev/backend/modules/lfs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

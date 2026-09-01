@@ -52,9 +52,9 @@ if [ "$PLAYWRIGHT_MODE" = "container" ]; then
     echo "Install docker/podman or set CONTAINER_RUNTIME to an available runtime." >&2
     exit 1
   fi
-  PLAYWRIGHT_VERSION=$(sed -n 's/.*"@playwright\/test"[[:space:]]*:[[:space:]]*"[^[:digit:]]*\([^"]*\)".*/\1/p' package.json)
+  PLAYWRIGHT_VERSION=$(sed -n 's/.*"@playwright\/test"[[:space:]]*:[[:space:]]*"[^[:digit:]]*\([^"]*\)".*/\1/p' frontend/package.json)
   if ! [[ "$PLAYWRIGHT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
-    echo "error: invalid @playwright/test version in package.json: '${PLAYWRIGHT_VERSION}'" >&2
+    echo "error: invalid @playwright/test version in frontend/package.json: '${PLAYWRIGHT_VERSION}'" >&2
     exit 1
   fi
   PLAYWRIGHT_IMAGE="mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble"
@@ -191,4 +191,4 @@ export GITEA_TEST_E2E_TIMEOUT_FACTOR
 if [ "$PLAYWRIGHT_MODE" = "container" ]; then
   export PW_TEST_CONNECT_WS_ENDPOINT="ws://127.0.0.1:${PLAYWRIGHT_SERVER_PORT}/"
 fi
-pnpm exec playwright test "$@"
+node_modules/.bin/playwright test "$@"

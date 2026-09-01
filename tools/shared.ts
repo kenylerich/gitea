@@ -4,7 +4,7 @@ import type {Plugin} from 'vite';
 
 // custom elements, vue must render these as-is instead of resolving them as components
 const webComponents = new Set([
-  // our own, in web_src/js/webcomponents
+  // our own, in frontend/web_src/js/webcomponents
   'overflow-menu',
   'relative-time',
   // from dependencies

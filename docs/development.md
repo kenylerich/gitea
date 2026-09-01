@@ -74,7 +74,7 @@ checks that CI runs are available as `make checks`.
 ## Building and adding SVGs
 
 SVG icons are built with `make svg`, which compiles the icon sources into
-`public/assets/img/svg`. Custom icons can be added under `web_src/svg`.
+`public/assets/img/svg`. Custom icons can be added under `frontend/web_src/svg`.
 
 ## Updating the API
 

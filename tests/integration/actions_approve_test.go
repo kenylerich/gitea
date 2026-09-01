@@ -11,12 +11,12 @@ import (
 	"testing"
 	"time"
 
-	actions_model "gitea.dev/models/actions"
-	auth_model "gitea.dev/models/auth"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	api "gitea.dev/modules/structs"
+	actions_model "gitea.dev/backend/models/actions"
+	auth_model "gitea.dev/backend/models/auth"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	api "gitea.dev/backend/modules/structs"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -179,7 +179,7 @@ jobs:
 		user4APICtx := NewAPITestContext(t, user4.Name, forkRepo.Name, auth_model.AccessTokenScopeWriteRepository)
 		defer doAPIDeleteRepository(user4APICtx)(t)
 
-		// PR #1: a benign change from user4's fork â€” first-time contributor, gate engages.
+		// PR #1: a benign change from user4's fork â€?first-time contributor, gate engages.
 		doAPICreateFile(user4APICtx, "first.txt", &api.CreateFileOptions{
 			FileOptions: api.FileOptions{
 				NewBranchName: "first",
@@ -205,7 +205,7 @@ jobs:
 		assert.Equal(t, user2.ID, run1.ApprovedBy)
 
 		// PR #2: same user, fresh branch. Pre-fix, this run was created with
-		// NeedApproval=false and dispatched immediately â€” the bypass path.
+		// NeedApproval=false and dispatched immediately â€?the bypass path.
 		doAPICreateFile(user4APICtx, "second.txt", &api.CreateFileOptions{
 			FileOptions: api.FileOptions{
 				NewBranchName: "second",
@@ -220,7 +220,7 @@ jobs:
 		assert.NoError(t, err)
 
 		run2 := unittest.AssertExistsAndLoadBean(t, &actions_model.ActionRun{RepoID: baseRepo.ID, TriggerUserID: user4.ID, Ref: fmt.Sprintf("refs/pull/%d/head", pr2.Index)})
-		assert.True(t, run2.NeedApproval, "second fork PR must still require approval â€” prior approval-to-run does not grant trust")
+		assert.True(t, run2.NeedApproval, "second fork PR must still require approval â€?prior approval-to-run does not grant trust")
 		assert.Equal(t, actions_model.StatusBlocked, run2.Status)
 		assert.EqualValues(t, 0, run2.ApprovedBy)
 

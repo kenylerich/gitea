@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/modules/setting"
-	"gitea.dev/modules/test"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/modules/setting"
+	"gitea.dev/backend/modules/test"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

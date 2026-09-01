@@ -6,8 +6,8 @@ package integration
 import (
 	"testing"
 
-	"gitea.dev/models/auth"
-	"gitea.dev/models/unittest"
+	"gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/unittest"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

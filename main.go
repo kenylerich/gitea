@@ -10,16 +10,16 @@ import (
 	"strings"
 	"time"
 
-	"gitea.dev/cmd"
-	"gitea.dev/modules/log"
-	"gitea.dev/modules/setting"
+	"gitea.dev/backend/cmd"
+	"gitea.dev/backend/modules/log"
+	"gitea.dev/backend/modules/setting"
 
 	// register supported doc types
-	_ "gitea.dev/modules/markup/console"
-	_ "gitea.dev/modules/markup/csv"
-	_ "gitea.dev/modules/markup/jupyter"
-	_ "gitea.dev/modules/markup/markdown"
-	_ "gitea.dev/modules/markup/orgmode"
+	_ "gitea.dev/backend/modules/markup/console"
+	_ "gitea.dev/backend/modules/markup/csv"
+	_ "gitea.dev/backend/modules/markup/jupyter"
+	_ "gitea.dev/backend/modules/markup/markdown"
+	_ "gitea.dev/backend/modules/markup/orgmode"
 
 	"github.com/urfave/cli/v3"
 )

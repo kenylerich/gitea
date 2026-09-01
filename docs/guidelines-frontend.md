@@ -10,18 +10,20 @@ The frontend uses [Vue 3](https://vuejs.org/), hard-forked Fomantic-UI (built on
 and [Tailwind CSS](https://tailwindcss.com/). Pages are rendered with Go HTML templates.
 Source files live in:
 
-- `web_src/css/`: CSS styles
-- `web_src/js/`: JavaScript and TypeScript
-- `web_src/js/components/`: Vue components
-- `web_src/js/features/`: feature modules wired up at page load
+- `frontend/web_src/css/`: CSS styles
+- `frontend/web_src/js/`: JavaScript and TypeScript
+- `frontend/web_src/js/components/`: Vue components
+- `frontend/web_src/js/features/`: feature modules wired up at page load
 - `templates/`: Go HTML templates
 
 ## Dependencies
 
 Frontend dependencies are managed with [pnpm](https://pnpm.io/). The same rules as
 for [backend dependencies](guidelines-backend.md#dependencies) apply, except the
-relevant files are `package.json` and `pnpm-lock.yaml`, and new versions must always
-reference an existing published version.
+relevant files are `frontend/package.json` and `frontend/pnpm-lock.yaml`, and new
+versions must always reference an existing published version. pnpm commands run
+inside `frontend/`; a root `node_modules` symlink points at `frontend/node_modules`
+for tools invoked from the repository root.
 
 ## Framework usage
 
@@ -59,7 +61,7 @@ Gitea uses Vue 3 **without** JSX to keep HTML and JavaScript separate.
 Prefer Tailwind utility classes with the `tw-` prefix, and the `flex-*` layout
 helpers over per-child margins. Gitea also ships a small set of custom helpers:
 `gt-` for general helpers and `g-` for framework-level helpers (see
-`web_src/css/helpers.css`); use these only when a Tailwind utility does not exist.
+`frontend/web_src/css/helpers.css`); use these only when a Tailwind utility does not exist.
 
 Write class attributes as a single readable unit in templates:
 
@@ -77,9 +79,9 @@ Write class attributes as a single readable unit in templates:
 ## Data fetching
 
 Use the `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` wrappers from
-[`web_src/js/modules/fetch.ts`](../web_src/js/modules/fetch.ts).
+[`frontend/web_src/js/modules/fetch.ts`](../frontend/web_src/js/modules/fetch.ts).
 
-Prefer to use our [`fetch-action.ts`](../web_src/js/modules/fetch-action.ts) framework
+Prefer to use our [`fetch-action.ts`](../frontend/web_src/js/modules/fetch-action.ts) framework
 for form submissions, button clicks and network requests, which provides a consistent UX and error handling.
 
 ## DOM attributes
@@ -92,7 +94,7 @@ in new code. Never bind user-provided data directly onto DOM nodes.
 - In Vue, use `v-if` and `v-show`. If an element contains unmanaged DOM, use `v-show` to avoid losing the DOM state.
 - In Go templates and plain JavaScript, use the `.tw-hidden` class together with the
   `showElem()`, `hideElem()`, and `toggleElem()` helpers from
-  [`web_src/js/utils/dom.ts`](../web_src/js/utils/dom.ts).
+  [`frontend/web_src/js/utils/dom.ts`](../frontend/web_src/js/utils/dom.ts).
 
 ## UI component gallery
 

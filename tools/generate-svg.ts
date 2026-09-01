@@ -116,7 +116,7 @@ async function main() {
   await mkdir(fileURLToPath(new URL('../public/assets/img/svg', import.meta.url)), {recursive: true});
   await Promise.all([
     ...processAssetsSvgFiles('node_modules/@primer/octicons/build/svg/*-16.svg', {prefix: 'octicon'}),
-    ...processAssetsSvgFiles('web_src/svg/*.svg'),
+    ...processAssetsSvgFiles('frontend/web_src/svg/*.svg'),
     ...processAssetsSvgFiles('public/assets/img/gitea.svg', {fullName: 'gitea-gitea'}),
     processMaterialFileIcons(),
   ]);

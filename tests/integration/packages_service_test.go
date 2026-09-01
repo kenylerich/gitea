@@ -7,11 +7,11 @@ import (
 	"bytes"
 	"testing"
 
-	packages_model "gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	packages_module "gitea.dev/modules/packages"
-	packages_service "gitea.dev/services/packages"
+	packages_model "gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	packages_module "gitea.dev/backend/modules/packages"
+	packages_service "gitea.dev/backend/services/packages"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

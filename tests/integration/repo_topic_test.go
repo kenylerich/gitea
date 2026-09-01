@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"testing"
 
-	api "gitea.dev/modules/structs"
+	api "gitea.dev/backend/modules/structs"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

@@ -8,18 +8,18 @@ import (
 	"net/http"
 	"testing"
 
-	auth_model "gitea.dev/models/auth"
-	"gitea.dev/models/db"
-	issues_model "gitea.dev/models/issues"
-	access_model "gitea.dev/models/perm/access"
-	repo_model "gitea.dev/models/repo"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/git"
-	"gitea.dev/modules/json"
-	api "gitea.dev/modules/structs"
-	issue_service "gitea.dev/services/issue"
-	pull_service "gitea.dev/services/pull"
+	auth_model "gitea.dev/backend/models/auth"
+	"gitea.dev/backend/models/db"
+	issues_model "gitea.dev/backend/models/issues"
+	access_model "gitea.dev/backend/models/perm/access"
+	repo_model "gitea.dev/backend/models/repo"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/git"
+	"gitea.dev/backend/modules/json"
+	api "gitea.dev/backend/modules/structs"
+	issue_service "gitea.dev/backend/services/issue"
+	pull_service "gitea.dev/backend/services/pull"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"
@@ -561,7 +561,7 @@ func testAPIPullReviewCommentReply(t *testing.T) {
 	assert.Equal(t, parent.ReviewID, reply.ReviewID)
 	assert.Equal(t, "README.md", reply.Path)
 
-	// empty body â€” caught by binding
+	// empty body â€?caught by binding
 	req = NewRequestWithJSON(t, http.MethodPost, url, &api.CreatePullReviewCommentReplyOptions{}).AddTokenAuth(token)
 	MakeRequest(t, req, http.StatusUnprocessableEntity)
 
@@ -570,7 +570,7 @@ func testAPIPullReviewCommentReply(t *testing.T) {
 	req = NewRequestWithJSON(t, http.MethodPost, bad, &api.CreatePullReviewCommentReplyOptions{Body: "x"}).AddTokenAuth(token)
 	MakeRequest(t, req, http.StatusNotFound)
 
-	// reply to a code comment that belongs to a different PR â€” 404
+	// reply to a code comment that belongs to a different PR â€?404
 	otherCodeComment := unittest.AssertExistsAndLoadBean(t, &issues_model.Comment{ID: 4, Type: issues_model.CommentTypeCode})
 	require.NotEqual(t, pullIssue.ID, otherCodeComment.IssueID)
 	wrongPR := fmt.Sprintf("/api/v1/repos/%s/%s/pulls/%d/comments/%d/replies", repo.OwnerName, repo.Name, pullIssue.Index, otherCodeComment.ID)

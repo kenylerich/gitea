@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	actions_model "gitea.dev/models/actions"
-	"gitea.dev/models/db"
-	"gitea.dev/modules/timeutil"
+	actions_model "gitea.dev/backend/models/actions"
+	"gitea.dev/backend/models/db"
+	"gitea.dev/backend/modules/timeutil"
 	"gitea.dev/tests"
 
 	"github.com/stretchr/testify/assert"

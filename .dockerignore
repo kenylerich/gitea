@@ -54,6 +54,8 @@ cpu.out
 /tests/integration/gitea-integration-*
 /tests/*.ini
 /node_modules
+/frontend/node_modules
+/.pnpm-store
 /yarn.lock
 /yarn-error.log
 /npm-debug.log*
@@ -69,12 +71,13 @@ cpu.out
 /Dockerfile
 /Dockerfile.rootless
 /.venv
+/.config/tools/.venv
 
 # Files and folders that were previously generated
 /public/assets/img/webpack
 
 # Snapcraft
-snap/.snapcraft/
+contrib/packaging/snap/.snapcraft/
 parts/
 stage/
 prime/

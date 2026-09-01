@@ -27,8 +27,8 @@ Frontend unit tests run with [Vitest](https://vitest.dev/) browser mode:
 
 ```bash
 make test-frontend
-# single file:
-pnpm exec vitest <path-filter>
+# single file (run from frontend/ where the pnpm project lives):
+cd frontend && pnpm exec vitest <path-filter>
 ```
 
 ## Integration tests

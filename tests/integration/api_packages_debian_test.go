@@ -14,12 +14,12 @@ import (
 	"strings"
 	"testing"
 
-	"gitea.dev/models/packages"
-	"gitea.dev/models/unittest"
-	user_model "gitea.dev/models/user"
-	"gitea.dev/modules/base"
-	debian_module "gitea.dev/modules/packages/debian"
-	packages_cleanup_service "gitea.dev/services/packages/cleanup"
+	"gitea.dev/backend/models/packages"
+	"gitea.dev/backend/models/unittest"
+	user_model "gitea.dev/backend/models/user"
+	"gitea.dev/backend/modules/base"
+	debian_module "gitea.dev/backend/modules/packages/debian"
+	packages_cleanup_service "gitea.dev/backend/services/packages/cleanup"
 	"gitea.dev/tests"
 
 	"github.com/blakesmith/ar"
