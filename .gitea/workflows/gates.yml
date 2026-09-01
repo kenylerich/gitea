@@ -1,0 +1,77 @@
+name: gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: gates-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  GO_VERSION: "1.27"
+  NODE_VERSION: "26"
+
+jobs:
+  fmt-check:
+    name: gofmt
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: gofmt diff
+        run: |
+          diff=$(gofmt -l .) || true
+          if [ -n "$diff" ]; then
+            echo "::group::gofmt violations"
+            echo "$diff"
+            echo "::endgroup::"
+            exit 1
+          fi
+      - name: gofumpt diff
+        run: |
+          go install mvdan.cc/gofumpt@latest
+          diff=$(gofumpt -l -extra .) || true
+          if [ -n "$diff" ]; then
+            echo "::group::gofumpt violations"
+            echo "$diff"
+            echo "::endgroup::"
+            exit 1
+          fi
+
+  tidy-check:
+    name: go mod tidy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - run: go mod tidy -diff
+
+  build-backend:
+    name: go build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: build linux/amd64
+        run: go build -tags 'bindata sqlite sqlite_unlock_notify' ./...
+        env:
+          GOOS: linux
+          GOARCH: amd64
