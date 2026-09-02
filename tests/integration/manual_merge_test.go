@@ -71,7 +71,7 @@ func TestManualMergeAutodetect(t *testing.T) {
 
 		// Capture each branch's expected merge commit hash from the local clone,
 		// so we can assert that Gitea recorded the correct merge commit per PR
-		// (and not just "some merge commit" â€?see the regression where every PR
+		// (and not just "some merge commit" â€”see the regression where every PR
 		// was attributed to the last merge in the push).
 		expectedMergeCommits := make([]string, len(branchNames))
 		for i, branchName := range branchNames {

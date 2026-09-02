@@ -755,7 +755,7 @@ func checkCommitStatusAndInsertFakeStatus(t *testing.T, repo *repo_model.Reposit
 }
 
 // insertFakeStatus inserts a success status that lands in the same dedupe
-// group as `prev` â€?the actions runner mixes the workflow file path into
+// group as `prev` â€”the actions runner mixes the workflow file path into
 // ContextHash, so we must reuse it (rather than recomputing from Context).
 func insertFakeStatus(t *testing.T, repo *repo_model.Repository, sha string, prev *git_model.CommitStatus) {
 	err := commitstatus_service.CreateCommitStatus(t.Context(), repo, user_model.NewActionsUser(), sha, &git_model.CommitStatus{

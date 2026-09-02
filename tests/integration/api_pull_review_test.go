@@ -561,7 +561,7 @@ func testAPIPullReviewCommentReply(t *testing.T) {
 	assert.Equal(t, parent.ReviewID, reply.ReviewID)
 	assert.Equal(t, "README.md", reply.Path)
 
-	// empty body â€?caught by binding
+	// empty body â€”caught by binding
 	req = NewRequestWithJSON(t, http.MethodPost, url, &api.CreatePullReviewCommentReplyOptions{}).AddTokenAuth(token)
 	MakeRequest(t, req, http.StatusUnprocessableEntity)
 
@@ -570,7 +570,7 @@ func testAPIPullReviewCommentReply(t *testing.T) {
 	req = NewRequestWithJSON(t, http.MethodPost, bad, &api.CreatePullReviewCommentReplyOptions{Body: "x"}).AddTokenAuth(token)
 	MakeRequest(t, req, http.StatusNotFound)
 
-	// reply to a code comment that belongs to a different PR â€?404
+	// reply to a code comment that belongs to a different PR â€”404
 	otherCodeComment := unittest.AssertExistsAndLoadBean(t, &issues_model.Comment{ID: 4, Type: issues_model.CommentTypeCode})
 	require.NotEqual(t, pullIssue.ID, otherCodeComment.IssueID)
 	wrongPR := fmt.Sprintf("/api/v1/repos/%s/%s/pulls/%d/comments/%d/replies", repo.OwnerName, repo.Name, pullIssue.Index, otherCodeComment.ID)
