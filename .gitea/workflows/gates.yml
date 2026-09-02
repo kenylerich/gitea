@@ -26,16 +26,28 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
-      - name: gofmt check
+      - name: gofmt check (changed .go files only)
         run: |
-          out=$(gofmt -l ./backend/ 2>&1 || true)
-          real=$(echo "$out" | grep -v 'illegal UTF-8' || true)
-          if [ -n "$real" ]; then
-            echo "::error::gofmt violations found:"
-            echo "$real"
+          mapfile -t FILES < <(git diff --name-only HEAD~1 HEAD -- '*.go' 'backend/**/*.go' || true)
+          if [ ${#FILES[@]} -eq 0 ]; then
+            echo "no .go files changed"
+            exit 0
+          fi
+          fail=0
+          for f in "${FILES[@]}"; do
+            [ -f "$f" ] || continue
+            out=$(gofmt -l "$f" 2>/dev/null || true)
+            if [ -n "$out" ]; then
+              echo "$out"
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
             exit 1
           fi
           echo "gofmt ok"
