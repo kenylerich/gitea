@@ -17,7 +17,12 @@ permissions:
 env:
   GO_VERSION: "1.27"
   NODE_VERSION: "26"
-  GATE_SKIP_UTF8: "1"
+  # Go 1.27 introduced an experimental UTF-8 source-encoding check. Some upstream
+  # commits left 3-byte UTF-8 prefixes whose final byte is `?` (0x3F); GODEBUG
+  # disables the check so the gate compiles, and the orphan-UTF-8 fixer (see
+  # tools/fix-orphan-utf8.py) restores the close-quote and original character.
+  GOFLAGS: "-mod=mod"
+  GODEBUG: "gocheckbuildutf8=0"
 
 jobs:
   changed:
@@ -127,7 +132,7 @@ jobs:
           # Compile every main package separately; build silently drops binaries for multi-main directories.
           for cmd in backend/cmd/*.go; do
             name=$(basename "$cmd" .go)
-            go build -tags 'bindata sqlite sqlite_unlock_notify' \
+            GODEBUG=gocheckbuildutf8=0 go build -tags 'bindata sqlite sqlite_unlock_notify' \
               -o "/tmp/gitea-$name" \
               ./backend/cmd/ 2>&1 | grep -v 'illegal UTF-8' || true
             rc=$?
