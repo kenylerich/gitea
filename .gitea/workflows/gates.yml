@@ -60,7 +60,11 @@ jobs:
           echo "go=$go" >> "$GITHUB_OUTPUT"
           echo "frontend=$frontend" >> "$GITHUB_OUTPUT"
           echo "docs=$docs" >> "$GITHUB_OUTPUT"
-          echo "files=$(printf '%s\n' "${FILES[@]}")" >> "$GITHUB_OUTPUT"
+          {
+            echo "files<<EOF"
+            printf '%s\n' "${FILES[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
   gofmt:
     name: gofmt
@@ -78,14 +82,14 @@ jobs:
       - name: gofmt diff (changed files only)
         run: |
           set +e
-          mapfile -t FILES < <(echo '${{ needs.changed.outputs.files }}' | tr ' ' '\n' | grep -E '\.go$' || true)
+          mapfile -t FILES < <(printf '%s\n' '${{ needs.changed.outputs.files }}' | grep -E '\.go$' || true)
           if [ ${#FILES[@]} -eq 0 ]; then
             echo "no go files changed"
             exit 0
           fi
           unset diff
           for f in "${FILES[@]}"; do
-            out=$(gofmt -l "$f" 2>&1)
+            out=$(GODEBUG=$GODEBUG gofmt -l "$f" 2>&1)
             if [ -n "$out" ]; then diff+="$out"$'\n'; fi
           done
           # Skip files with illegal-UTF-8 errors (known pre-existing data corruption)
@@ -161,17 +165,17 @@ jobs:
         working-directory: frontend
       - name: eslint changed files
         run: |
-          mapfile -t FILES < <(echo '${{ needs.changed.outputs.files }}' | tr ' ' '\n' | grep -E '\.(ts|tsx|vue|js)$' || true)
+          mapfile -t FILES < <(printf '%s\n' '${{ needs.changed.outputs.files }}' | grep -E '\.(ts|tsx|vue|js)$' ||
+ true)
           if [ ${#FILES[@]} -eq 0 ]; then exit 0; fi
           cd frontend
           npx eslint --max-warnings=0 "${FILES[@]}" 2>&1 | tail -40 || true
       - name: stylelint changed files
         run: |
-          mapfile -t FILES < <(echo '${{ needs.changed.outputs.files }}' | tr ' ' '\n' | grep -E '\.(css|scss)$' || true)
+          mapfile -t FILES < <(printf '%s\n' '${{ needs.changed.outputs.files }}' | grep -E '\.(css|scss)$' || true)
           if [ ${#FILES[@]} -eq 0 ]; then exit 0; fi
           cd frontend
           npx stylelint "${FILES[@]}" 2>&1 | tail -40 || true
-
   docs-lint:
     name: markdownlint
     needs: changed
@@ -188,6 +192,6 @@ jobs:
       - run: npm install -g markdownlint-cli@0.49.1
       - name: lint changed docs
         run: |
-          mapfile -t FILES < <(echo '${{ needs.changed.outputs.files }}' | tr ' ' '\n' | grep -E '\.md$' || true)
+          mapfile -t FILES < <(printf '%s\n' '${{ needs.changed.outputs.files }}' | grep -E '\.md$' || true)
           if [ ${#FILES[@]} -eq 0 ]; then exit 0; fi
           markdownlint --config .config/lint/.markdownlint.yaml "${FILES[@]}"
