@@ -79,8 +79,8 @@ func InsertRun(ctx context.Context, run *actions_model.ActionRun, content []byte
 		}
 
 		// Insert before parsing jobs or evaluating workflow-level concurrency
-		// so that run.ID is populated. Expressions referencing github.run_id â€?		// in run-name, job names, runs-on, or a workflow-level concurrency
-		// group like `${{ github.head_ref || github.run_id }}` â€?would otherwise
+		// so that run.ID is populated. Expressions referencing github.run_id â€”		// in run-name, job names, runs-on, or a workflow-level concurrency
+		// group like `${{ github.head_ref || github.run_id }}` â€”would otherwise
 		// interpolate to an empty string.
 		if err := db.Insert(ctx, run); err != nil {
 			return err
@@ -178,7 +178,7 @@ func InsertRun(ctx context.Context, run *actions_model.ActionRun, content []byte
 }
 
 // insertRunJob builds a single run job from a parsed workflow job, evaluates its
-// job-level concurrency, inserts it, and â€?for a ready no-needs reusable caller â€?// inline-expands (or skips) it. It returns the inserted job, any jobs cancelled by
+// job-level concurrency, inserts it, and â€”for a ready no-needs reusable caller â€”// inline-expands (or skips) it. It returns the inserted job, any jobs cancelled by
 // job concurrency, and whether a post-commit emitter pass is needed to resolve the
 // caller's dependents.
 func insertRunJob(ctx context.Context, run *actions_model.ActionRun, runAttempt *actions_model.ActionRunAttempt, workflowJob *jobparser.SingleWorkflow, vars map[string]string, inputs map[string]any, slots maxParallelSlots) (*actions_model.ActionRunJob, []*actions_model.ActionRunJob, bool, error) {

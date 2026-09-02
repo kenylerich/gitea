@@ -315,7 +315,7 @@ func (s *Service) UpdateLog(
 	}
 
 	// Bail unless we have new rows or a NoMore to finalize. Even with
-	// NoMore, bail when the runner has outrun the server â€?archiving a
+	// NoMore, bail when the runner has outrun the server â€”archiving a
 	// log with a gap is worse than asking it to retry.
 	if len(rows) == 0 && (!req.Msg.NoMore || req.Msg.Index > ack) {
 		res.Msg.AckIndex = ack

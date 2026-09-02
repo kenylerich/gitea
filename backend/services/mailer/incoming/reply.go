@@ -28,14 +28,14 @@ const (
 var (
 	headerFromFields = []string{
 		"from", "fra", "de", "von", "da", "van", "från", "expéditeur",
-		"发件�?, "寄件�?, "差出�?, "보낸사람",
+		"发件—", "寄件—", "差出—", "보낸사람",
 	}
 	headerFields = append([]string{
 		"to", "cc", "bcc", "sent", "date", "subject", "reply-to",
 		"til", "emne", "an", "betreff", "gesendet", "para", "assunto", "asunto",
 		"risposta", "inviato", "oggetto", "destinataire", "objet", "répondre à",
 		"aan", "onderwerp", "beantwoorden", "skickat", "till", "ämne",
-		"收件�?, "主题", "主旨", "主題", "收件�?, "抄�?, "日期", "宛先", "件名", "받는사람", "제목",
+		"收件—", "主题", "主旨", "主題", "收件—", "抄—", "日期", "宛先", "件名", "받는사람", "제목",
 	}, headerFromFields...)
 )
 
@@ -50,14 +50,14 @@ var patterns = sync.OnceValue(func() (ret struct {
 	ret.signature = regexp.MustCompile(`(?i)^(--|__|—` +
 		`|sent (from|via|with) .+|get outlook for .+` +
 		`|envoyé depuis mon .+|sendt fra min .+|von meinem .+|verzonden (met|vanaf) .+` +
-		`|(發|�?自我�?*(` + cjkDevice + `).*` +
-		`|.*(` + cjkDevice + `).*(から送信|에서 보냄|傳送|发�?)$`)
+		`|(發|—自我—*(` + cjkDevice + `).*` +
+		`|.*(` + cjkDevice + `).*(から送信|에서 보냄|傳送|发—")$`)
 
 	// attribution introducing quoted history: a line ending in a "wrote:" verb
 	// (Latin/Cyrillic or CJK), a "Name <email> wrote" line, a lead word directly
 	// followed by a day number or weekday plus a year and a time, or an ISO-date-led
 	// line. The date phrasing, trailing colon and the email before the verb guard
-	// against prose (so "On the 2024 roadmap �?at 10:00" is not an attribution).
+	// against prose (so "On the 2024 roadmap —at 10:00" is not an attribution).
 	ret.attribution = regexp.MustCompile(`(?i)^>*\s*(` +
 		`.*[\s">'](` + wroteVerbs + `)\s*[:：]` +
 		`|.*(` + cjkWroteVerbs + `)\s*[:：]` +
@@ -94,8 +94,8 @@ func extractReply(text string) string {
 	// drop the trailing block of quoted/blank lines, unless the whole body is quoted
 	end := len(lines)
 	for end > 0 {
-		// "�? is the trailing marker some mobile clients (Mailbox) append
-		if t := strings.TrimSpace(lines[end-1]); t != "" && t != "�? && !strings.HasPrefix(t, ">") {
+		// "—" is the trailing marker some mobile clients (Mailbox) append
+		if t := strings.TrimSpace(lines[end-1]); t != "" && t != "—" && !strings.HasPrefix(t, ">") {
 			break
 		}
 		end--
@@ -124,12 +124,12 @@ func headerBlock(first string, rest []string) bool {
 
 // headerLine reports whether the already-trimmed line is a "Field:" header for one
 // of fields. An ASCII colon must be followed by a space so prose like "To:do this"
-// is ignored; the CJK fullwidth colon "�? needs no space.
+// is ignored; the CJK fullwidth colon "—" needs no space.
 func headerLine(line string, fields []string) bool {
 	lower := strings.ToLower(line)
 	for _, field := range fields {
 		if rest, ok := strings.CutPrefix(lower, field); ok &&
-			(strings.HasPrefix(rest, ": ") || strings.HasPrefix(rest, "�?)) {
+			(strings.HasPrefix(rest, ": ") || strings.HasPrefix(rest, "—")) {
 			return true
 		}
 	}

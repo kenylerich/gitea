@@ -142,7 +142,7 @@ func TestGetCommitActionsStatusMap(t *testing.T) {
 		assert.Equal(t, want, got[key], "icon status for %s", tc.jobName)
 	}
 
-	// Nil receiver returns "" without panicking â€?used by callers that skip enrichment.
+	// Nil receiver returns "" without panicking â€”used by callers that skip enrichment.
 	var nilInfo actions_module.CommitActionsStatusMap
 	assert.Empty(t, nilInfo.IconStatus(statuses[0]))
 }
@@ -191,7 +191,7 @@ jobs:
 	require.NoError(t, err)
 
 	// Both workflow files should produce a row even though the display
-	// Context is identical â€?matching GitHub's behavior.
+	// Context is identical â€”matching GitHub's behavior.
 	hashes := map[string]struct{}{}
 	targets := map[string]struct{}{}
 	for _, st := range statuses {
@@ -247,7 +247,7 @@ func TestCreateCommitStatus_LegacyHashRecovery(t *testing.T) {
 	latest, err := git_model.GetLatestCommitStatus(t.Context(), repo.ID, branch.CommitID, db.ListOptionsAll)
 	require.NoError(t, err)
 	// The new row must reuse the legacy hash so GetLatestCommitStatus returns
-	// only one entry for this Context â€?the success, not the orphaned pending.
+	// only one entry for this Context â€”the success, not the orphaned pending.
 	matches := 0
 	for _, s := range latest {
 		if s.Context == ctxName {
@@ -320,7 +320,7 @@ func TestCreateCommitStatus_LegacyHashExternalNotAdopted(t *testing.T) {
 
 // TestCreateCommitStatus_UnnamedWorkflowUsesFileName: a workflow with no
 // non-blank `name:` uses the file name in the Context, not an empty
-// "/ job (event)" â€?covers both an omitted and a whitespace-only name.
+// "/ job (event)" â€”covers both an omitted and a whitespace-only name.
 func TestCreateCommitStatus_UnnamedWorkflowUsesFileName(t *testing.T) {
 	assert.NoError(t, unittest.PrepareTestDatabase())
 

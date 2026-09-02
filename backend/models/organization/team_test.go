@@ -217,7 +217,7 @@ func TestSearchTeamIncludeVisible(t *testing.T) {
 	assert.NoError(t, unittest.PrepareTestDatabase())
 
 	const orgID int64 = 3
-	// User 5 is an org member but only belongs to team 1 (Owners) â€?make sure
+	// User 5 is an org member but only belongs to team 1 (Owners) â€”make sure
 	// they don't see team 2 (default private) but do see a freshly added
 	// limited team they are not a member of.
 	visible := &organization.Team{

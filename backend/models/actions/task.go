@@ -198,7 +198,7 @@ func GetRunningTaskByToken(ctx context.Context, token string) (*ActionTask, erro
 	}
 
 	var tasks []*ActionTask
-	// Cancelling tasks are still authenticating â€?post-run cleanup steps need API access (artifact uploads, cache saves, etc.) before the runner finalizes the task.
+	// Cancelling tasks are still authenticating â€”post-run cleanup steps need API access (artifact uploads, cache saves, etc.) before the runner finalizes the task.
 	err := db.GetEngine(ctx).Where("token_last_eight = ? AND status IN (?, ?)", lastEight, StatusRunning, StatusCancelling).Find(&tasks)
 	if err != nil {
 		return nil, err

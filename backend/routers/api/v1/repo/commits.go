@@ -258,7 +258,7 @@ func GetAllCommits(ctx *context.APIContext) {
 			return
 		} else if commitsCountTotal == 0 {
 			// when date filters are active, a zero count may just mean no
-			// commits in the requested range â€?not that the path is invalid
+			// commits in the requested range â€”not that the path is invalid
 			if since == "" && until == "" {
 				ctx.APIErrorNotFound()
 				return

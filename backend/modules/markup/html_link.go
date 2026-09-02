@@ -60,15 +60,15 @@ func shortLinkProcessor(ctx *RenderContext, node *html.Node) {
 				// not used for syntax into UTF-8 quotes. So checking val[0] won't
 				// be enough, since that only checks a single byte.
 				if len(val) > 1 {
-					if (strings.HasPrefix(val, "â€?) && strings.HasSuffix(val, "â€?)) ||
-						(strings.HasPrefix(val, "â€?) && strings.HasSuffix(val, "â€?)) {
-						const lenQuote = len("â€?)
+					if (strings.HasPrefix(val, "â€”") && strings.HasSuffix(val, "â€”")) ||
+						(strings.HasPrefix(val, "â€”") && strings.HasSuffix(val, "â€”")) {
+						const lenQuote = len("â€”")
 						val = val[lenQuote : len(val)-lenQuote]
 					} else if (strings.HasPrefix(val, "\"") && strings.HasSuffix(val, "\"")) ||
 						(strings.HasPrefix(val, "'") && strings.HasSuffix(val, "'")) {
 						val = val[1 : len(val)-1]
-					} else if strings.HasPrefix(val, "'") && strings.HasSuffix(val, "â€?) {
-						const lenQuote = len("â€?)
+					} else if strings.HasPrefix(val, "'") && strings.HasSuffix(val, "â€”") {
+						const lenQuote = len("â€”")
 						val = val[1 : len(val)-lenQuote]
 					}
 				}

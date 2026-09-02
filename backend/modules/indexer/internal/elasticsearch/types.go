@@ -42,7 +42,7 @@ func (s SortField) source() map[string]any {
 }
 
 // SearchRequest captures everything Gitea sends to the _search endpoint.
-// Aggregations and Highlight are raw ES JSON bodies â€?callers write them as
+// Aggregations and Highlight are raw ES JSON bodies â€”callers write them as
 // map[string]any since each has exactly one call site with a fixed shape.
 type SearchRequest struct {
 	Query        Query

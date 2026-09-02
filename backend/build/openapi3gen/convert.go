@@ -26,10 +26,10 @@ var rxDeprecated = regexp.MustCompile(`(?i)(?:^|[\n.;])\s*deprecated\b`)
 // Gitea-specific post-processing: server URL, file-schema fixups, URI
 // formats, deprecated flags, and shared-enum extraction.
 //
-// astEnumMap is a value-set-key â†?Go-type-name(s) map (built by
+// astEnumMap is a value-set-key â€”Go-type-name(s) map (built by
 // ScanSwaggerEnumTypes). When a value set is shared by multiple Go types,
 // per-property disambiguation uses the x-go-enum-desc extension. If a shared
-// enum in the spec has no matching entry, Convert returns an error â€?no
+// enum in the spec has no matching entry, Convert returns an error â€”no
 // fallback naming.
 func Convert(swaggerJSON []byte, astEnumMap map[string][]string) (*openapi3.T, error) {
 	var swagger2 openapi2.T
@@ -179,7 +179,7 @@ type enumUsage struct {
 //
 // If the derived enum name collides with an existing component schema, or
 // no // swagger:enum annotation matches the value set, generation aborts
-// with an actionable error â€?there are no silent fallbacks.
+// with an actionable error â€”there are no silent fallbacks.
 func extractSharedEnums(doc *openapi3.T, astEnumMap map[string][]string) error {
 	if doc.Components == nil {
 		return nil
@@ -348,7 +348,7 @@ func extractEnumTypeName(s *openapi3.Schema, astEnumMap map[string][]string) str
 		return ""
 	}
 	// A candidate matches when it is a prefix of every const name AND the
-	// first character after the prefix is an uppercase ASCII letter â€?this
+	// first character after the prefix is an uppercase ASCII letter â€”this
 	// rejects e.g. "Alpha" matching "Alphabet" (suffix "bet" starts lower)
 	// while still accepting both "Alpha" and "AlphaPlus" against "AlphaPlusX"
 	// (both prefixes valid). The most specific (longest) wins; ties return
@@ -365,7 +365,7 @@ func extractEnumTypeName(s *openapi3.Schema, astEnumMap map[string][]string) str
 				break
 			}
 			suffix := c[len(name):]
-			// Empty suffix means the const name exactly equals the type name â€?valid exact match.
+			// Empty suffix means the const name exactly equals the type name â€”valid exact match.
 			// A non-empty suffix must begin with an uppercase letter to reject incidental
 			// prefix matches (e.g. "Alpha" should not match "Alphabet").
 			if len(suffix) > 0 && (suffix[0] < 'A' || suffix[0] > 'Z') {

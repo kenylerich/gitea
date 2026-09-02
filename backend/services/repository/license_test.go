@@ -119,7 +119,7 @@ func Test_resolveLicenses(t *testing.T) {
 	assert.Empty(t, licenses)
 	assert.NoError(t, err)
 
-	// 2. repo with a plain LICENSE file â€?classifier should detect MIT
+	// 2. repo with a plain LICENSE file â€”classifier should detect MIT
 	require.NoError(t, git.ForceFastImport(t.Context(), gitRepo, []git.FastImportCommit{{
 		Ref:     "refs/heads/master",
 		Message: "add LICENSE",
@@ -136,7 +136,7 @@ func Test_resolveLicenses(t *testing.T) {
 	assert.Equal(t, "MIT", licenses[0].SPDXID)
 	assert.Equal(t, "LICENSE", licenses[0].LicensePath)
 
-	// 3. repo with REUSE LICENSES/ dir â€?should take priority over root LICENSE
+	// 3. repo with REUSE LICENSES/ dir â€”should take priority over root LICENSE
 	require.NoError(t, git.ForceFastImport(t.Context(), gitRepo, []git.FastImportCommit{{
 		Ref:     "refs/heads/master",
 		Message: "add LICENSES dir",
@@ -160,7 +160,7 @@ func Test_resolveLicenses(t *testing.T) {
 		assert.True(t, strings.HasPrefix(l.LicensePath, "LICENSES/"))
 	}
 
-	// 4. remove all licenses â€?should return not exist
+	// 4. remove all licenses â€”should return not exist
 	require.NoError(t, git.ForceFastImport(t.Context(), gitRepo, []git.FastImportCommit{{
 		Ref:     "refs/heads/master",
 		Message: "remove licenses",

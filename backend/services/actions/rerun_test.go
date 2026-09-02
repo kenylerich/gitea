@@ -134,8 +134,8 @@ func TestRerunPlan(t *testing.T) {
 	//	├── validate       id=104, attemptJobID=4,  parent=103
 	//	├── push           id=105, attemptJobID=5,  parent=103, needs=[validate]
 	//	├── verify         id=106, attemptJobID=6,  parent=103, caller, needs=[push]
-	//	�?  ├── smoke-test id=107, attemptJobID=7,  parent=106
-	//	�?  └── cleanup    id=108, attemptJobID=8,  parent=106, needs=[smoke-test]
+	//	—  ├── smoke-test id=107, attemptJobID=7,  parent=106
+	//	—  └── cleanup    id=108, attemptJobID=8,  parent=106, needs=[smoke-test]
 	//	└── finish-deploy  id=109, attemptJobID=9,  parent=103, needs=[verify]
 	//	verify             id=110, attemptJobID=10, needs=[deploy] (top-level, same JobID)
 

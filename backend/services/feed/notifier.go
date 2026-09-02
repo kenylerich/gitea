@@ -114,7 +114,7 @@ func (a *actionNotifier) CreateIssueComment(ctx context.Context, doer *user_mode
 		// in case the content is in a Latin family language, we remove the last broken word.
 		lastSpaceIdx := strings.LastIndex(truncatedContent, " ")
 		if lastSpaceIdx != -1 && (len(truncatedContent)-lastSpaceIdx < 15) {
-			truncatedContent = truncatedContent[:lastSpaceIdx] + "â€?
+			truncatedContent = truncatedContent[:lastSpaceIdx] + "â€”"
 		}
 	}
 	act.Content = fmt.Sprintf("%d|%s", issue.Index, truncatedContent)

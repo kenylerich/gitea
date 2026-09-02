@@ -38,7 +38,7 @@ type ActionRun struct {
 	TriggerUserID     int64                  `xorm:"index"`
 	TriggerUser       *user_model.User       `xorm:"-"`
 	ScheduleID        int64
-	Ref               string `xorm:"index"` // the commit/tag/â€?that caused the run
+	Ref               string `xorm:"index"` // the commit/tag/â€”that caused the run
 	IsRefDeleted      bool   `xorm:"-"`
 	CommitSHA         string
 	IsForkPullRequest bool                         // If this is triggered by a PR from a forked repository or an untrusted user, we need to check if it is approved and limit permissions when running the workflow.

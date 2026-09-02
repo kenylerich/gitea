@@ -288,7 +288,7 @@ func (e *escapeStreamer) writeBrokenRune(_ []byte) (err error) {
 	// Although we'd like to use the original bytes to display (show the real broken content to users),
 	// however, when this "escape stream" module is applied to the content, the content has already been processed by other modules.
 	// So the invalid bytes just can't be kept till this step, in most (all) cases, the only thing we see here is utf8.RuneError
-	_, err = io.WriteString(e.out, `<span class="broken-code-point">ï¿?/span>`)
+	_, err = io.WriteString(e.out, `<span class="broken-code-point">â€”/span>`)
 	return err
 }
 

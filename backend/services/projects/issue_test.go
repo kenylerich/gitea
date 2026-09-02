@@ -26,7 +26,7 @@ func Test_Projects(t *testing.T) {
 	org3 := unittest.AssertExistsAndLoadBean(t, &org_model.Organization{ID: 3})
 	user4 := unittest.AssertExistsAndLoadBean(t, &user_model.User{ID: 4})
 	// user15 is on org3's team7 (write access to the public repo32 only), so it can see org3 public repos
-	// but has no access to the private repo3 â€?a genuine "no permission to the private repo" org member.
+	// but has no access to the private repo3 â€”a genuine "no permission to the private repo" org member.
 	user15 := unittest.AssertExistsAndLoadBean(t, &user_model.User{ID: 15})
 
 	t.Run("User projects", func(t *testing.T) {
@@ -159,7 +159,7 @@ func Test_Projects(t *testing.T) {
 
 		t.Run("Org owner team member", func(t *testing.T) {
 			// user2 is on org3's Owners team, so it has access to the private repo3 and must see both the
-			// public and the private issue â€?the owner-team access that team.authorize grants at runtime.
+			// public and the private issue â€”the owner-team access that team.authorize grants at runtime.
 			columnIssues, err := LoadIssuesFromProject(t.Context(), projects[0], &issues_model.IssuesOptions{
 				Owner: org3.AsUser(),
 				Doer:  user2,

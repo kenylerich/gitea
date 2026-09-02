@@ -169,7 +169,7 @@ func (b *RedisBroker) readLoop(ctx context.Context, topic string, ps *redis.PubS
 			select {
 			case s.ch <- payload:
 			default:
-				log.Trace("pubsub redis: dropping message on topic %q â€?subscriber channel full", topic)
+				log.Trace("pubsub redis: dropping message on topic %q â€”subscriber channel full", topic)
 			}
 		}
 		b.mu.RUnlock()

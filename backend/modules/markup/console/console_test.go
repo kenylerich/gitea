@@ -19,8 +19,8 @@ func TestRenderConsole(t *testing.T) {
 		expected string
 	}{
 		{"\x1b[37m\x1b[40mnpm\x1b[0m \x1b[0m\x1b[32minfo\x1b[0m \x1b[0m\x1b[35mit worked if it ends with\x1b[0m ok", `<span class="term-fg37 term-bg40">npm</span> <span class="term-fg32">info</span> <span class="term-fg35">it worked if it ends with</span> ok`},
-		{"\x1b[1;2m \x1b[123m å•?, `<span class="term-fg2">  å•?/span>`},
-		{"\x1b[1;2m \x1b[123m \xef", `<span class="term-fg2">  ï¿?/span>`},
+		{"\x1b[1;2m \x1b[123m â€”", `<span class="term-fg2">  â€”/span>`},
+		{"\x1b[1;2m \x1b[123m \xef", `<span class="term-fg2">  â€”/span>`},
 		{"\x1b[1;2m \x1b[123m \xef \xef", ``},
 		{"\x1b[12", ``},
 		{"\x1b[1", ``},

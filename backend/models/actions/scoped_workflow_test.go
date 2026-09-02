@@ -65,7 +65,7 @@ func TestGetEffectiveScopedWorkflowSources(t *testing.T) {
 
 	required, err := IsScopedWorkflowRequired(ctx, 2, 100, "a.yml")
 	require.NoError(t, err)
-	assert.True(t, required, "instance marks a.yml required â†?required for owner 2 even though org left it optional")
+	assert.True(t, required, "instance marks a.yml required â€”required for owner 2 even though org left it optional")
 
 	required, err = IsScopedWorkflowRequired(ctx, 2, 100, "x.yml")
 	require.NoError(t, err)

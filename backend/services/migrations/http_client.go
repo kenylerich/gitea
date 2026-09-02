@@ -14,7 +14,7 @@ import (
 )
 
 // migrationHTTPClient is the shared migration client. Callers that would otherwise build a client per
-// request use it (via getMigrationHTTPClient) so a single connection pool is reused across downloads â€?// e.g. many release assets from the same host â€?instead of a fresh pool and TLS handshake each time. It
+// request use it (via getMigrationHTTPClient) so a single connection pool is reused across downloads â€”// e.g. many release assets from the same host â€”instead of a fresh pool and TLS handshake each time. It
 // is built lazily on first use and reset by Init whenever the allow/block lists change; OnceValue keeps
 // concurrent callers sharing a single client instead of racing to create their own.
 var migrationHTTPClient = util.OnceValue[*http.Client]{Func: newMigrationHTTPClient}

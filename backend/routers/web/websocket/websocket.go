@@ -23,7 +23,7 @@ const (
 	pingTimeout  = 10 * time.Second
 	writeTimeout = 10 * time.Second
 
-	// First code in the IANA library/framework reserved range (3000â€?999).
+	// First code in the IANA library/framework reserved range (3000â€”999).
 	// Sentinel for an unauthenticated session so the SharedWorker can tell
 	// "your cookie is gone" apart from a transient network failure and stop
 	// reconnecting in a tight loop.

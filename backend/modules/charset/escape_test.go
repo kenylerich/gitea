@@ -52,8 +52,8 @@ var escapeControlTests = []escapeControlTest{
 	},
 	{
 		name:   "japanese",
-		text:   "日属秘ぞしちゅ�?,
-		result: "日属秘ぞしちゅ�?,
+		text:   "日属秘ぞしちゅ—",
+		result: "日属秘ぞしちゅ—",
 		status: EscapeStatus{},
 	},
 	{
@@ -199,14 +199,14 @@ func TestHTMLChunkReader(t *testing.T) {
 		{text: "ghi", isTag: false},
 	})
 
-	rune1, rune2, rune3, rune4 := "A", "é", "�?, "🌞"
+	rune1, rune2, rune3, rune4 := "A", "é", "—", "🌞"
 	require.Len(t, rune1, 1)
 	require.Len(t, rune2, 2)
 	require.Len(t, rune3, 3)
 	require.Len(t, rune4, 4)
 	input := "<" + rune1 + rune2 + rune3 + rune4 + ">" + rune1 + rune2 + rune3 + rune4
-	testReadChunks(t, 4, input, []textPart{{"<Aé", true}, {"�?, true}, {"🌞", true}, {">", true}, {"Aé", false}, {"�?, false}, {"🌞", false}})
-	testReadChunks(t, 5, input, []textPart{{"<Aé", true}, {"�?, true}, {"🌞>", true}, {"Aé", false}, {"�?, false}, {"🌞", false}})
-	testReadChunks(t, 6, input, []textPart{{"<Aé", true}, {"�?, true}, {"🌞>", true}, {"A", false}, {"é�?, false}, {"🌞", false}})
-	testReadChunks(t, 7, input, []textPart{{"<Aé�?, true}, {"🌞>", true}, {"A", false}, {"é�?, false}, {"🌞", false}})
+	testReadChunks(t, 4, input, []textPart{{"<Aé", true}, {"—", true}, {"🌞", true}, {">", true}, {"Aé", false}, {"—", false}, {"🌞", false}})
+	testReadChunks(t, 5, input, []textPart{{"<Aé", true}, {"—", true}, {"🌞>", true}, {"Aé", false}, {"—", false}, {"🌞", false}})
+	testReadChunks(t, 6, input, []textPart{{"<Aé", true}, {"—", true}, {"🌞>", true}, {"A", false}, {"é—", false}, {"🌞", false}})
+	testReadChunks(t, 7, input, []textPart{{"<Aé—", true}, {"🌞>", true}, {"A", false}, {"é—", false}, {"🌞", false}})
 }

@@ -1469,7 +1469,7 @@ func highlightCodeLines(name, lang string, sections []*DiffSection, isLeft bool,
 	// HINT: GIT-DIFF-HIGHLIGHT-LINE-NUMBER: it should handle all CR(\r) before highlight to make line numbers match
 	if strings.Contains(content, "\r") {
 		content = strings.ReplaceAll(content, "\r\n", "\n")
-		content = strings.ReplaceAll(content, "\r", "‚ê?)
+		content = strings.ReplaceAll(content, "\r", "‚Äî")
 	}
 	lexer := highlight.DetectChromaLexerByFileName(name, lang)
 	highlightedNewContent := highlight.RenderCodeByLexer(lexer, content)

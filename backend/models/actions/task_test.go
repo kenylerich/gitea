@@ -84,14 +84,14 @@ func TestMakeTaskStepDisplayName(t *testing.T) {
 			jobStep: &jobparser.Step{
 				Name: strings.Repeat("a", 300),
 			},
-			expected: strings.Repeat("a", 252) + "â€?,
+			expected: strings.Repeat("a", 252) + "â€”",
 		},
 		{
 			name: "very long run truncated",
 			jobStep: &jobparser.Step{
 				Run: strings.Repeat("a", 300),
 			},
-			expected: "Run " + strings.Repeat("a", 248) + "â€?,
+			expected: "Run " + strings.Repeat("a", 248) + "â€”",
 		},
 	}
 	for _, tt := range tests {

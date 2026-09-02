@@ -257,7 +257,7 @@ func CreateSkippedCommitStatusForFilteredWorkflow(ctx context.Context, repo *rep
 func createWorkflowCommitStatus(ctx context.Context, repo *repo_model.Repository, commitID, ctxName, workflowID string, state commitstatus.CommitStatusState, targetURL, description string) error {
 	// Mix the workflow file path into the hash so two workflow files that
 	// share the same `name:` and job name produce distinct commit statuses
-	// even though they render identically â€?matching GitHub's behavior
+	// even though they render identically â€”matching GitHub's behavior
 	// (issue #35699).
 	ctxHash := git_model.HashCommitStatusContext(ctxName + "\x00" + workflowID)
 	// Pre-fix rows were hashed from Context alone. If a pre-existing row with

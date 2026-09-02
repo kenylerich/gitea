@@ -31,7 +31,8 @@ type Features struct {
 
 	UsingGogit                 bool
 	SupportProcReceive         bool           // >= 2.29
-	SupportHashSha256          bool           // >= 2.42, SHA-256 repositories no longer an â€˜experimental curiosityâ€?	SupportedObjectFormats     []ObjectFormat // sha1, sha256
+	SupportHashSha256          bool           // >= 2.42, SHA-256 repositories no longer an experimental curiosity
+	SupportedObjectFormats     []ObjectFormat // sha1, sha256
 	SupportCheckAttrOnBare     bool           // >= 2.40
 	SupportCatFileBatchCommand bool           // >= 2.36, support `git cat-file --batch-command`
 	SupportGitMergeTree        bool           // >= 2.40 // we also need "--merge-base"

@@ -568,7 +568,7 @@ func denyNonTeamMember(ctx *context.APIContext, orgID int64) {
 
 // reqTeamReadAccess allows callers who can list the team to read its metadata.
 // Non-members are admitted by the team's visibility tier and parent org visibility.
-// Not sufficient for mutations â€?use reqOrgOwnership() or reqTeamMembership() for those.
+// Not sufficient for mutations â€”use reqOrgOwnership() or reqTeamMembership() for those.
 func reqTeamReadAccess() func(ctx *context.APIContext) {
 	return func(ctx *context.APIContext) {
 		orgID, privileged, ok := teamAccessPrivileged(ctx)

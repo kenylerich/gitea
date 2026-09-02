@@ -11,7 +11,7 @@ import (
 	"gitea.dev/backend/services/pubsub"
 )
 
-// Wire contract with frontend/web_src/js/user-events.sharedworker.ts â€?keep in sync.
+// Wire contract with frontend/web_src/js/user-events.sharedworker.ts â€”keep in sync.
 const (
 	EventNotificationCount = "notification-count"
 	EventStopwatches       = "stopwatches"

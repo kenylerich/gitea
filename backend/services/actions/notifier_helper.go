@@ -517,7 +517,7 @@ func ifNeedApprovalWith(
 		return false, nil
 	}
 
-	// trust the user only after a merged PR â€?matching GitHub Actions. Approving one
+	// trust the user only after a merged PR â€”matching GitHub Actions. Approving one
 	// fork PR's run must not implicitly trust later fork PRs that replace the workflow.
 	if merged, err := hasMergedPR(ctx, repo.ID, user.ID); err != nil {
 		return false, fmt.Errorf("HasMergedPullRequestInRepo: %w", err)

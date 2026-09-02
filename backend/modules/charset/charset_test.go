@@ -72,7 +72,7 @@ func TestToUTF8(t *testing.T) {
 	stringMustEndWith(t, "AAA.", res)
 
 	// Japanese (Shift-JIS)
-	// 日属秘ぞしちゅ�?	res = ToUTF8([]byte{
+	// 日属秘ぞしちゅ—	res = ToUTF8([]byte{
 		0x93, 0xFA, 0x91, 0xAE, 0x94, 0xE9, 0x82, 0xBC, 0x82, 0xB5, 0x82,
 		0xBF, 0x82, 0xE3, 0x81, 0x42,
 	}, ConvertOpts{})
@@ -120,7 +120,7 @@ func TestToUTF8WithFallback(t *testing.T) {
 	assert.Equal(t, minmatch, res[0:len(minmatch)])
 
 	// Japanese (Shift-JIS)
-	// "日属秘ぞしちゅ�?
+	// "日属秘ぞしちゅ—"
 	res = ToUTF8WithFallback([]byte{0x93, 0xFA, 0x91, 0xAE, 0x94, 0xE9, 0x82, 0xBC, 0x82, 0xB5, 0x82, 0xBF, 0x82, 0xE3, 0x81, 0x42}, ConvertOpts{})
 	assert.Equal(t, []byte{
 		0xE6, 0x97, 0xA5, 0xE5, 0xB1, 0x9E, 0xE7, 0xA7, 0x98, 0xE3,
@@ -161,7 +161,7 @@ func TestToUTF8DropErrors(t *testing.T) {
 	assert.Equal(t, minmatch, res[0:len(minmatch)])
 
 	// Japanese (Shift-JIS)
-	// "日属秘ぞしちゅ�?
+	// "日属秘ぞしちゅ—"
 	res = ToUTF8DropErrors([]byte{0x93, 0xFA, 0x91, 0xAE, 0x94, 0xE9, 0x82, 0xBC, 0x82, 0xB5, 0x82, 0xBF, 0x82, 0xE3, 0x81, 0x42})
 	assert.Equal(t, []byte{
 		0xE6, 0x97, 0xA5, 0xE5, 0xB1, 0x9E, 0xE7, 0xA7, 0x98, 0xE3,
@@ -217,7 +217,7 @@ func stringMustEndWith(t *testing.T, expected string, value []byte) {
 func TestToUTF8WithFallbackReader(t *testing.T) {
 	test.MockVariableValue(&ToUTF8WithFallbackReaderPrefetchSize)
 
-	block := "aá啊�?
+	block := "aá啊?
 	runes := []rune(block)
 	assert.Len(t, string(runes[0]), 1)
 	assert.Len(t, string(runes[1]), 2)

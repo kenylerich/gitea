@@ -471,7 +471,7 @@ func UpdateRunJob(ctx context.Context, job *ActionRunJob, cond builder.Cond, col
 	}
 
 	// xorm's Update writes only non-zero fields when cols is empty, so a zero job.Status
-	// with empty cols means status isn't actually being persisted â€?skip aggregation.
+	// with empty cols means status isn't actually being persisted â€”skip aggregation.
 	statusUpdated := slices.Contains(cols, "status") || (len(cols) == 0 && job.Status != 0)
 	if affected == 0 || !statusUpdated {
 		return affected, nil
@@ -494,8 +494,8 @@ func UpdateRunJob(ctx context.Context, job *ActionRunJob, cond builder.Cond, col
 				return 0, err
 			}
 		case job.Status.IsDone():
-			// When a job finishes, bump the version so that idle runners â€?whose
-			// tasksVersion already equals the current latestVersion â€?learn that
+			// When a job finishes, bump the version so that idle runners â€”whose
+			// tasksVersion already equals the current latestVersion â€”learn that
 			// remaining waiting jobs are still available and attempt PickTask again.
 			// Without this bump, runners that completed their tasks would see
 			// tasksVersion==latestVersion and skip PickTask, leaving the other jobs

@@ -65,7 +65,7 @@ type FindRunOptions struct {
 	WorkflowID       string
 	WorkflowRepoID   int64                 // source-aware filter: the repo a run's workflow content came from (0 = any)
 	IsScopedRun      optional.Option[bool] // is the run from a scoped workflow
-	Ref              string                // the commit/tag/â€?that caused this workflow
+	Ref              string                // the commit/tag/â€”that caused this workflow
 	TriggerUserID    int64
 	TriggerEvent     webhook_module.HookEventType
 	Status           []Status

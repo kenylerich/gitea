@@ -382,11 +382,11 @@ func MockActionsRunsJobs(ctx *context.Context) {
 		// Layout:
 		//   prepare           (regular, top-level)
 		//   local_caller      (caller, same-repo, expanded)
-		//     â”?lib_step      (regular)
-		//     â”?inner_caller  (caller, same-repo nested, expanded)
-		//       â”?deep_job    (regular)
+		//     â€”lib_step      (regular)
+		//     â€”inner_caller  (caller, same-repo nested, expanded)
+		//       â€”deep_job    (regular)
 		//   cross_caller      (caller, cross-repo, expanded)
-		//     â”?external_job  (regular)
+		//     â€”external_job  (regular)
 		//   build (linux|windows|macos)       (regular matrix; graph folds into one "build" node)
 		//   build-call (linux|windows|macos)  (caller matrix, each calls build.yml; folds into one "build-call" node like "build")
 		//   final             (regular, needs local_caller + cross_caller)
@@ -400,12 +400,12 @@ func MockActionsRunsJobs(ctx *context.Context) {
 			externalJobID = int64(406)
 			finalID       = int64(407)
 
-			// Regular matrix set â€?the graph already folds these into a single "build" node.
+			// Regular matrix set â€”the graph already folds these into a single "build" node.
 			buildLinuxID   = int64(410)
 			buildWindowsID = int64(411)
 			buildMacosID   = int64(412)
 
-			// Caller matrix set â€?each matrix leg calls the same reusable workflow. #38466: like the
+			// Caller matrix set â€”each matrix leg calls the same reusable workflow. #38466: like the
 			// regular "build" matrix above, these fold into one "build-call" node. Matrix legs share a
 			// single JobID, so the legs below use JobID "build-call" and differ only by their name suffix.
 			buildCallLinuxID    = int64(420)
@@ -455,7 +455,7 @@ func MockActionsRunsJobs(ctx *context.Context) {
 				ParentJobID: crossCallerID,
 			},
 
-			// Regular matrix "build" â€?these fold into one matrix node in the graph. The matrix legs
+			// Regular matrix "build" â€”these fold into one matrix node in the graph. The matrix legs
 			// share a single JobID ("build"); the " (variant)" name suffix distinguishes the legs.
 			{
 				ID: buildLinuxID, Link: jobLink(buildLinuxID), JobID: "build", Name: "build (linux)",
@@ -470,7 +470,7 @@ func MockActionsRunsJobs(ctx *context.Context) {
 				Status: actions_model.StatusSuccess.String(), Duration: "90s", Needs: []string{"prepare"},
 			},
 
-			// Caller matrix "build-call" â€?each leg calls the same reusable workflow. #38466: like the
+			// Caller matrix "build-call" â€”each leg calls the same reusable workflow. #38466: like the
 			// regular "build" matrix above, these fold into one node. The matrix legs share a single
 			// JobID ("build-call"); the " (variant)" name suffix distinguishes the legs.
 			{

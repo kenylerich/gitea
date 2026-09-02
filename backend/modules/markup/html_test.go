@@ -228,12 +228,12 @@ func TestRender_links(t *testing.T) {
 
 	t.Run("LinkEllipsis", func(t *testing.T) {
 		input := util.EllipsisDisplayString("http://10.1.2.3", 12)
-		assert.Equal(t, "http://10�?, input)
-		test(input, "<p>http://10�?/p>")
+		assert.Equal(t, "http://10—", input)
+		test(input, "<p>http://10—/p>")
 
 		input = util.EllipsisDisplayString("http://10.1.2.3", 13)
-		assert.Equal(t, "http://10.�?, input)
-		test(input, "<p>http://10.�?/p>")
+		assert.Equal(t, "http://10.—", input)
+		test(input, "<p>http://10.—/p>")
 	})
 }
 
@@ -371,8 +371,8 @@ func TestRender_emoji(t *testing.T) {
 		"Some text with 😄😄 2 emoji next to each other",
 		`<p>Some text with <span class="emoji" aria-label="grinning face with smiling eyes">😄</span><span class="emoji" aria-label="grinning face with smiling eyes">😄</span> 2 emoji next to each other</p>`)
 	test(
-		"😎🤪🔐🤑�?,
-		`<p><span class="emoji" aria-label="smiling face with sunglasses">😎</span><span class="emoji" aria-label="zany face">🤪</span><span class="emoji" aria-label="locked with key">🔐</span><span class="emoji" aria-label="money-mouth face">🤑</span><span class="emoji" aria-label="red question mark">�?/span></p>`)
+		"😎🤪🔐🤑—",
+		`<p><span class="emoji" aria-label="smiling face with sunglasses">😎</span><span class="emoji" aria-label="zany face">🤪</span><span class="emoji" aria-label="locked with key">🔐</span><span class="emoji" aria-label="money-mouth face">🤑</span><span class="emoji" aria-label="red question mark">—/span></p>`)
 
 	// should match nothing
 	test(":100:200", `<p>:100:200</p>`)

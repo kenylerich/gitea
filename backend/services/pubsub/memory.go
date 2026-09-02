@@ -65,7 +65,7 @@ func (b *MemoryBroker) Publish(topic string, msg []byte) {
 		select {
 		case ch <- msg:
 		default:
-			log.Trace("pubsub: dropping message on topic %q â€?subscriber channel full", topic)
+			log.Trace("pubsub: dropping message on topic %q â€”subscriber channel full", topic)
 		}
 	}
 }

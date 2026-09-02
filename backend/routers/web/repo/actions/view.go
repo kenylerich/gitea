@@ -213,7 +213,7 @@ func View(ctx *context_module.Context) {
 	jobID := ctx.PathParamInt64("job")
 	ctx.Data["JobID"] = jobID // it can be 0 when no job (e.g.: run summary view)
 
-	// Browser tab title, ordered most-specific â†?least-specific so narrow tabs keep the useful part.
+	// Browser tab title, ordered most-specific â€”least-specific so narrow tabs keep the useful part.
 	// Separator matches the " - " used by head.tmpl when joining to PageTitleCommon.
 	titleParts := []string{run.Title, run.WorkflowID}
 	if jobID > 0 {
@@ -1128,7 +1128,7 @@ func getCurrentRunJobsByPathParam(ctx *context_module.Context) (*actions_model.A
 	var attempt *actions_model.ActionRunAttempt
 	switch {
 	case attemptNum > 0:
-		// Explicit attempt number in the URL â€?user is viewing a historical attempt.
+		// Explicit attempt number in the URL â€”user is viewing a historical attempt.
 		attempt, err = actions_model.GetRunAttemptByRunIDAndAttemptNum(ctx, run.ID, attemptNum)
 		if err != nil {
 			ctx.NotFoundOrServerError("GetRunAttemptByRunIDAndAttempt", func(err error) bool {
@@ -1137,7 +1137,7 @@ func getCurrentRunJobsByPathParam(ctx *context_module.Context) (*actions_model.A
 			return nil, nil, nil
 		}
 	case selectedJob != nil && selectedJob.RunAttemptID > 0:
-		// No explicit attempt in the URL, but the requested job belongs to a known attempt â€?resolve via the job.
+		// No explicit attempt in the URL, but the requested job belongs to a known attempt â€”resolve via the job.
 		attempt, err = actions_model.GetRunAttemptByRepoAndID(ctx, selectedJob.RepoID, selectedJob.RunAttemptID)
 		if err != nil {
 			ctx.NotFoundOrServerError("GetRunAttemptByRepoAndID", func(err error) bool {
@@ -1146,7 +1146,7 @@ func getCurrentRunJobsByPathParam(ctx *context_module.Context) (*actions_model.A
 			return nil, nil, nil
 		}
 	default:
-		// No attempt context at all â€?show the latest attempt (nil for legacy runs).
+		// No attempt context at all â€”show the latest attempt (nil for legacy runs).
 		attempt, _, err = run.GetLatestAttempt(ctx)
 		if err != nil {
 			ctx.NotFoundOrServerError("GetLatestAttempt", func(err error) bool {

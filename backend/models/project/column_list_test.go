@@ -20,12 +20,12 @@ func TestGetColumnsPaginated(t *testing.T) {
 	assert.NoError(t, err)
 	assert.EqualValues(t, 3, count)
 
-	// Page 1, limit 2 â€?returns first 2 columns
+	// Page 1, limit 2 â€”returns first 2 columns
 	page1, err := GetColumns(t.Context(), projectID, db.ListOptions{Page: 1, PageSize: 2})
 	assert.NoError(t, err)
 	assert.Len(t, page1, 2)
 
-	// Page 2, limit 2 â€?returns remaining column
+	// Page 2, limit 2 â€”returns remaining column
 	page2, err := GetColumns(t.Context(), projectID, db.ListOptions{Page: 2, PageSize: 2})
 	assert.NoError(t, err)
 	assert.Len(t, page2, 1)

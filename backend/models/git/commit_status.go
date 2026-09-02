@@ -519,7 +519,7 @@ func NewCommitStatus(ctx context.Context, opts NewCommitStatusOptions) error {
 
 		// Callers may pre-compute a ContextHash to keep entries that share a
 		// human-readable Context separated (e.g. two workflow files with the
-		// same `name:` â€?issue #35699). Only derive from Context when unset.
+		// same `name:` â€”issue #35699). Only derive from Context when unset.
 		if opts.CommitStatus.ContextHash == "" {
 			opts.CommitStatus.ContextHash = HashCommitStatusContext(opts.CommitStatus.Context)
 		}
